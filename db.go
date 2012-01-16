@@ -20,8 +20,8 @@ type DB struct {
 }
 
 type Range struct {
-	start []byte
-	limit []byte
+	Start []byte
+	Limit []byte
 }
 
 func Open(dbname string, o *Options) (*DB, error) {
@@ -119,10 +119,10 @@ func (db *DB) GetApproximateSizes(ranges []Range) []uint64 {
 	startLens := make([]C.size_t, len(ranges))
 	limitLens := make([]C.size_t, len(ranges))
 	for i, r := range ranges {
-		starts[i] = C.CString(string(r.start))
-		startLens[i] = C.size_t(len(r.start))
-		limits[i] = C.CString(string(r.limit))
-		limitLens[i] = C.size_t(len(r.limit))
+		starts[i] = C.CString(string(r.Start))
+		startLens[i] = C.size_t(len(r.Start))
+		limits[i] = C.CString(string(r.Limit))
+		limitLens[i] = C.size_t(len(r.Limit))
 	}
 	sizes := make([]uint64, len(ranges))
 	numranges := C.int(len(ranges))
