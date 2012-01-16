@@ -1,5 +1,7 @@
 # levigo, LevelDB via CGO
 
+levigo is a Go wrapper for LevelDB.
+
 ## Building
 
 You'll need the LevelDB shared library installed on your machine. Right now,
