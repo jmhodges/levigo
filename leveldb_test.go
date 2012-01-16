@@ -182,10 +182,6 @@ func TestC(t *testing.T) {
 	DestroyEnv(env)
 }
 
-func BenchmarkReadWriteMix(b *testing.B) {
-
-}
-
 func CheckGet(t *testing.T, where string, db *DB, roptions *ReadOptions, key, expected []byte) {
 	getValue, err := db.Get(roptions, key)
 
