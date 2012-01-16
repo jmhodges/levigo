@@ -9,7 +9,7 @@ import (
 )
 
 type WriteBatch struct {
-	wb *C.leveldb_writebatch_t
+	Wbatch *C.leveldb_writebatch_t
 }
 
 func NewWriteBatch() *WriteBatch {
@@ -18,22 +18,22 @@ func NewWriteBatch() *WriteBatch {
 }
 
 func DestroyWriteBatch(w *WriteBatch) {
-	C.leveldb_writebatch_destroy(w.wb)
+	C.leveldb_writebatch_destroy(w.Wbatch)
 }
 
 func (w *WriteBatch) Put(key, value []byte) {
 	// FIXME: May be too unsafe if C.leveldb_put does not copy the data or
 	// places it on another thread.
-	C.leveldb_writebatch_put(w.wb,
+	C.leveldb_writebatch_put(w.Wbatch,
 		(*C.char)(unsafe.Pointer(&key[0])), C.size_t(len(key)),
 		(*C.char)(unsafe.Pointer(&value[0])), C.size_t(len(value)))
 }
 
 func (w *WriteBatch) Delete(key []byte) {
-	C.leveldb_writebatch_delete(w.wb,
+	C.leveldb_writebatch_delete(w.Wbatch,
 		(*C.char)(unsafe.Pointer(&key[0])), C.size_t(len(key)))
 }
 
 func (w *WriteBatch) Clear() {
-	C.leveldb_writebatch_clear(w.wb)
+	C.leveldb_writebatch_clear(w.Wbatch)
 }

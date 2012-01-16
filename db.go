@@ -101,7 +101,7 @@ func (db *DB) Delete(wo *WriteOptions, key []byte) error {
 
 func (db *DB) Write(wo *WriteOptions, w *WriteBatch) error {
 	var errStr *C.char
-	C.leveldb_write(db.Ldb, wo.Opt, w.wb, &errStr)
+	C.leveldb_write(db.Ldb, wo.Opt, w.Wbatch, &errStr)
 	if errStr != nil {
 		return DatabaseError(C.GoString(errStr))
 	}
