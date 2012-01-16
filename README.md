@@ -1,4 +1,4 @@
-# levigo, LevelDB via CGO
+# levigo
 
 levigo is a Go wrapper for LevelDB.
 
