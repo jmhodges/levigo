@@ -1,0 +1,7 @@
+Building this only works from the Makefile at this point
+
+You'll need the leveldb shared library installed on your machine. Suppose it is in /path/to/lib and the headers directory of leveldb is in /path/to/include. You'll then run:
+
+  CGO_CFLAGS="-I/path/to/leveldb/include" CGO_LDFLAGS="-L/path/to/lib" make install
+
+and have a working system. The go tool does not, yet, work. But I have grand plans for that.
