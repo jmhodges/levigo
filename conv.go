@@ -1,8 +1,6 @@
 package levigo
 
-// #cgo LDFLAGS: -lleveldb
-// #include "leveldb/c.h"
-// #include <stdlib.h>
+// #include "levigo.h"
 import "C"
 
 func boolToUchar(b bool) C.uchar {
