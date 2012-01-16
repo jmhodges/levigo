@@ -11,7 +11,4 @@ CGOFILES=\
 	iterator.go\
 	options.go
 
-CGO_OFILES=\
-	c-db.o
-
 include $(GOROOT)/src/Make.pkg
