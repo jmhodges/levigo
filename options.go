@@ -22,61 +22,35 @@ type WriteOptions struct {
 	Opt *C.leveldb_writeoptions_t
 }
 
-func NewCOptions() *C.leveldb_options_t {
-	return C.leveldb_options_create()
-}
-func DestroyCOptions(opt *C.leveldb_options_t) {
-	C.leveldb_options_destroy(opt)
-}
-
 func NewOptions() *Options {
-	opt := NewCOptions()
+	opt := C.leveldb_options_create()
 	return &Options{opt}
 }
 
 func DestroyOptions(o *Options) {
-	DestroyCOptions(o.Opt)
-}
-
-func NewCReadOptions() *C.leveldb_readoptions_t {
-	return C.leveldb_readoptions_create()
-}
-
-func DestroyCReadOptions(ropt *C.leveldb_readoptions_t) {
-	C.leveldb_readoptions_destroy(ropt)
+	C.leveldb_options_destroy(o.Opt)
 }
 
 func NewReadOptions() *ReadOptions {
-	opt := NewCReadOptions()
+	opt := C.leveldb_readoptions_create()
 	return &ReadOptions{opt}
 }
 
-func DestroyReadOptions(ropts *ReadOptions) {
-	DestroyCOptions(ropts.Opt)
-}
-
-func NewCWriteOptions() *C.leveldb_writeoptions_t {
-	return C.leveldb_writeoptions_create()
+func DestroyReadOptions(ro *ReadOptions) {
+	C.leveldb_readoptions_destroy(ro.Opt)
 }
 
 func NewWriteOptions() *WriteOptions {
-	opt := NewCWriteOptions()
+	opt := C.leveldb_writeoptions_create()
 	return &WriteOptions{opt}
 }
 
-func DestroyCWriteOptions(ropt *C.leveldb_writeoptions_t) {
-	C.leveldb_writeoptions_destroy(ropt)
-}
-func DestroyWriteOptions(ropts *WriteOptions) {
-	DestroyCWriteOptions(ropts.Opt)
-}
-
-func COptionsSetComparator(opt *C.leveldb_options_t, cmp *C.leveldb_comparator_t) {
-	C.leveldb_options_set_comparator(opt, cmp)
+func DestroyWriteOptions(wo *WriteOptions) {
+	C.leveldb_writeoptions_destroy(wo.Opt)
 }
 
 func (o *Options) SetComparator(cmp *C.leveldb_comparator_t) {
-	COptionsSetComparator(o.Opt, cmp)
+	C.leveldb_options_set_comparator(o.Opt, cmp)
 }
 
 func (o *Options) SetErrorIfExists(error_if_exists bool) {
