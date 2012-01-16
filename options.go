@@ -1,7 +1,7 @@
-package leveldb
+package levigo
 
 // #cgo LDFLAGS: -lleveldb
-// #include "leveldb-cgo.h"
+// #include "levigo.h"
 import "C"
 
 const (

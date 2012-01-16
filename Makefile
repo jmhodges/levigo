@@ -1,6 +1,6 @@
 include $(GOROOT)/src/Make.inc
 
-TARG=leveldb-cgo
+TARG=levigo
 CGOFILES=\
 	leveldb.go\
 	batch.go\

@@ -1,4 +1,4 @@
-package leveldb
+package levigo
 
 // #cgo LDFLAGS: -lleveldb
 // #include "leveldb/c.h"

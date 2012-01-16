@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdint.h>
-#include "leveldb-cgo.h"
-#include "_obj/_cgo_export.h"
+#include "levigo.h"
+#include "_cgo_export.h"
 
 void nonconst_leveldb_approximate_sizes(
     leveldb_t* db,
