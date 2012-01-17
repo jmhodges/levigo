@@ -182,7 +182,7 @@ func TestC(t *testing.T) {
 	DestroyEnv(env)
 }
 
-func TestGetShouldReturnNilOnMiss(t *testing.T) {
+func TestNilSlicesInDb(t *testing.T) {
 	dbname := fmt.Sprintf("/tmp/leveldb_get_test-%d", os.Geteuid())
 	options := NewOptions()
 	options.SetErrorIfExists(true)
@@ -193,13 +193,47 @@ func TestGetShouldReturnNilOnMiss(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Database could not be opened: %v", err)
 	}
-	val, err := db.Get(ro, []byte("nope"))
+	val, err := db.Get(ro, []byte("missing"))
 	if err != nil {
 		t.Errorf("Get failed: %v", err)
 	}
 	if val != nil {
-		t.Errorf("Missing key should return nil, not %v", val)
+		t.Errorf("A key not in the db should return nil, not %v", val)
 	}
+	wo := NewWriteOptions()
+	db.Put(wo, nil, []byte("love"))
+	val, err = db.Get(ro, nil)
+	if !bytes.Equal([]byte("love"), val) {
+		t.Errorf("Get should see the nil key: %v", val)
+	}
+	val, err = db.Get(ro, []byte{})
+	if !bytes.Equal([]byte("love"), val) {
+		t.Errorf("Get shouldn't distinguish between nil key and empty slice key: %v", val)
+	}
+
+	err = db.Put(wo, []byte("nilvalue"), nil)
+	if err != nil {
+		t.Errorf("nil value Put errored: %v", err)
+	}
+	// Compare with the []byte("missing") case. We expect Get to return a
+	// []byte{} here, but expect a nil returned there.
+	CheckGet(t, "nil value Put", db, ro, []byte("nilvalue"), []byte{})
+
+	err = db.Put(wo, []byte("emptyvalue"), []byte{})
+	if err != nil {
+		t.Errorf("empty value Put errored: %v", err)
+	}
+	CheckGet(t, "empty value Put", db, ro, []byte("emptyvalue"), []byte{})
+
+	err = db.Delete(wo, nil)
+	if err != nil {
+		t.Errorf("nil key Delete errored: %v", err)
+	}
+	err = db.Delete(wo, []byte{})
+	if err != nil {
+		t.Errorf("empty slice key Delete errored: %v", err)
+	}
+
 }
 
 func CheckGet(t *testing.T, where string, db *DB, roptions *ReadOptions, key, expected []byte) {
@@ -226,5 +260,4 @@ func CheckIter(t *testing.T, it *Iterator, key, value []byte) {
 	if !bytes.Equal(value, it.Value()) {
 		t.Errorf("Iterator: expected value %v, got %v", value, it.Value())
 	}
-
 }

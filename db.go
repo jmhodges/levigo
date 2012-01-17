@@ -60,16 +60,24 @@ func RepairDatabase(dbname string, o *Options) error {
 	return nil
 }
 
+// A subtlety here. If a nil slice is passed in as value, it will be returned
+// by Get as an empty slice.
 func (db *DB) Put(wo *WriteOptions, key, value []byte) error {
 	var errStr *C.char
 	// leveldb_put, _get, and _delete call memcpy() (by way of Memtable::Add)
 	// when called, so we do not need to worry about these []byte being
 	// reclaimed by GC.
-	kk := (*C.char)(unsafe.Pointer(&key[0]))
-	vv := (*C.char)(unsafe.Pointer(&value[0]))
+	var k *C.char
+	if len(key) != 0 {
+		k = (*C.char)(unsafe.Pointer(&key[0]))
+	}
+	var v *C.char
+	if len(value) != 0 {
+		v = (*C.char)(unsafe.Pointer(&value[0]))
+	}
 	C.leveldb_put(db.Ldb, wo.Opt,
-		kk, C.size_t(len(key)),
-		vv, C.size_t(len(value)),
+		k, C.size_t(len(key)),
+		v, C.size_t(len(value)),
 		&errStr)
 	if errStr != nil {
 		return DatabaseError(C.GoString(errStr))
@@ -80,13 +88,19 @@ func (db *DB) Put(wo *WriteOptions, key, value []byte) error {
 func (db *DB) Get(ro *ReadOptions, key []byte) ([]byte, error) {
 	var errStr *C.char
 	var vallen C.size_t
+	var k *C.char
+	if len(key) != 0 {
+		k = (*C.char)(unsafe.Pointer(&key[0]))
+	}
+
 	value := C.leveldb_get(db.Ldb, ro.Opt,
-		(*C.char)(unsafe.Pointer(&key[0])), C.size_t(len(key)),
+		k, C.size_t(len(key)),
 		&vallen, &errStr)
 
 	if errStr != nil {
 		return nil, DatabaseError(C.GoString(errStr))
 	}
+
 	if value == nil {
 		return nil, nil
 	}
@@ -95,8 +109,13 @@ func (db *DB) Get(ro *ReadOptions, key []byte) ([]byte, error) {
 
 func (db *DB) Delete(wo *WriteOptions, key []byte) error {
 	var errStr *C.char
+	var k *C.char
+	if len(key) != 0 {
+		k = (*C.char)(unsafe.Pointer(&key[0]))
+	}
+
 	C.leveldb_delete(db.Ldb, wo.Opt,
-		(*C.char)(unsafe.Pointer(&key[0])), C.size_t(len(key)),
+		k, C.size_t(len(key)),
 		&errStr)
 	if errStr != nil {
 		return DatabaseError(C.GoString(errStr))
