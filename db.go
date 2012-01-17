@@ -62,8 +62,9 @@ func RepairDatabase(dbname string, o *Options) error {
 
 func (db *DB) Put(wo *WriteOptions, key, value []byte) error {
 	var errStr *C.char
-	// FIXME: May be too unsafe if C.leveldb_put does not copy the data or
-	// places it on another thread.
+	// leveldb_put, _get, and _delete call memcpy() (by way of Memtable::Add)
+	// when called, so we do not need to worry about these []byte being
+	// reclaimed by GC.
 	kk := (*C.char)(unsafe.Pointer(&key[0]))
 	vv := (*C.char)(unsafe.Pointer(&value[0]))
 	C.leveldb_put(db.Ldb, wo.Opt,
@@ -79,7 +80,6 @@ func (db *DB) Put(wo *WriteOptions, key, value []byte) error {
 func (db *DB) Get(ro *ReadOptions, key []byte) ([]byte, error) {
 	var errStr *C.char
 	var vallen C.size_t
-
 	value := C.leveldb_get(db.Ldb, ro.Opt,
 		(*C.char)(unsafe.Pointer(&key[0])), C.size_t(len(key)),
 		&vallen, &errStr)

@@ -22,8 +22,9 @@ func DestroyWriteBatch(w *WriteBatch) {
 }
 
 func (w *WriteBatch) Put(key, value []byte) {
-	// FIXME: May be too unsafe if C.leveldb_put does not copy the data or
-	// places it on another thread.
+	// leveldb_writebatch_put, and _delete call memcpy() (by way of
+	// Memtable::Add) when called, so we do not need to worry about these
+	// []byte being reclaimed by GC.
 	C.leveldb_writebatch_put(w.Wbatch,
 		(*C.char)(unsafe.Pointer(&key[0])), C.size_t(len(key)),
 		(*C.char)(unsafe.Pointer(&value[0])), C.size_t(len(value)))
