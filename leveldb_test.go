@@ -182,6 +182,26 @@ func TestC(t *testing.T) {
 	DestroyEnv(env)
 }
 
+func TestGetShouldReturnNilOnMiss(t *testing.T) {
+	dbname := fmt.Sprintf("/tmp/leveldb_get_test-%d", os.Geteuid())
+	options := NewOptions()
+	options.SetErrorIfExists(true)
+	options.SetCreateIfMissing(true)
+	ro := NewReadOptions()
+	_ = DestroyDatabase(dbname, options)
+	db, err := Open(dbname, options)
+	if err != nil {
+		t.Fatalf("Database could not be opened: %v", err)
+	}
+	val, err := db.Get(ro, []byte("nope"))
+	if err != nil {
+		t.Errorf("Get failed: %v", err)
+	}
+	if val != nil {
+		t.Errorf("Missing key should return nil, not %v", val)
+	}
+}
+
 func CheckGet(t *testing.T, where string, db *DB, roptions *ReadOptions, key, expected []byte) {
 	getValue, err := db.Get(roptions, key)
 

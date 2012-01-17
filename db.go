@@ -79,11 +79,16 @@ func (db *DB) Put(wo *WriteOptions, key, value []byte) error {
 func (db *DB) Get(ro *ReadOptions, key []byte) ([]byte, error) {
 	var errStr *C.char
 	var vallen C.size_t
+
 	value := C.leveldb_get(db.Ldb, ro.Opt,
 		(*C.char)(unsafe.Pointer(&key[0])), C.size_t(len(key)),
 		&vallen, &errStr)
+
 	if errStr != nil {
 		return nil, DatabaseError(C.GoString(errStr))
+	}
+	if value == nil {
+		return nil, nil
 	}
 	return C.GoBytes(unsafe.Pointer(value), C.int(vallen)), nil
 }
