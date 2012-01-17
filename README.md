@@ -14,3 +14,9 @@ directory of LevelDB is in /path/to/include. In your clone of levigo, you'll run
     CGO_CFLAGS="-I/path/to/leveldb/include" CGO_LDFLAGS="-L/path/to/lib" make install
 
 and there you go.
+
+## Caveats
+
+Pros only. I answer questions at `golang-nuts@googlegroups.com`.
+
+Comparators must be written in C in your own library.
