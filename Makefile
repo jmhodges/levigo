@@ -11,4 +11,7 @@ CGOFILES=\
 	options.go\
 	conv.go
 
+HFILES=\
+	levigo.h
+
 include $(GOROOT)/src/Make.pkg
