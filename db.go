@@ -155,7 +155,7 @@ func (db *DB) GetApproximateSizes(ranges []Range) []uint64 {
 	startLensPtr := &startLens[0]
 	limitLensPtr := &limitLens[0]
 	sizesPtr := (*C.uint64_t)(&sizes[0])
-	C.leveldb_approximate_sizes(db.Ldb, numranges, startsPtr, startLensPtr, limitsPtr, limitLensPtr, sizesPtr)
+	C.levigo_leveldb_approximate_sizes(db.Ldb, numranges, startsPtr, startLensPtr, limitsPtr, limitLensPtr, sizesPtr)
 	for i, _ := range ranges {
 		C.free(unsafe.Pointer(starts[i]))
 		C.free(unsafe.Pointer(limits[i]))

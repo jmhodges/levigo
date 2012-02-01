@@ -14,4 +14,7 @@ CGOFILES=\
 HFILES=\
 	levigo.h
 
+CGO_OFILES=\
+	approximate_sizes.o
+
 include $(GOROOT)/src/Make.pkg
