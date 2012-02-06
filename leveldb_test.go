@@ -236,6 +236,52 @@ func TestNilSlicesInDb(t *testing.T) {
 
 }
 
+func TestIterationValidityLimits(t *testing.T) {
+	dbname := fmt.Sprintf("/tmp/leveldb_iteration_test-%d", os.Geteuid())
+	options := NewOptions()
+	options.SetErrorIfExists(true)
+	options.SetCreateIfMissing(true)
+	ro := NewReadOptions()
+	wo := NewWriteOptions()
+	_ = DestroyDatabase(dbname, options)
+	db, err := Open(dbname, options)
+	if err != nil {
+		t.Fatalf("Database could not be opened: %v", err)
+	}
+	defer db.Close()
+	db.Put(wo, []byte("bat"), []byte("somedata"))
+	db.Put(wo, []byte("done"), []byte("somedata"))
+	it := db.NewIterator(ro)
+	defer it.Close()
+	if it.Valid() {
+		t.Errorf("new Iterator was valid")
+	}
+	it.Seek([]byte("bat"))
+	if !it.Valid() {
+		t.Errorf("Seek to %#v failed.", []byte("bat"))
+	}
+	if !bytes.Equal([]byte("bat"), it.Key()) {
+		t.Errorf("did not seek to []byte(\"bat\")")
+	}
+	key := it.Key()
+	it.Next()
+	if bytes.Equal(key, it.Key()) {
+		t.Errorf("key should be a copy of last key")
+	}
+	it.Next()
+	if it.Valid() {
+		t.Errorf("iterating off the db should result in an invalid iterator")
+	}
+	err = it.GetError()
+	if err != nil {
+		t.Errorf("should not have seen an error on an invalid iterator")
+	}
+	it.Seek([]byte("bat"))
+	if !it.Valid() {
+		t.Errorf("Iterator should be valid again")
+	}
+}
+
 func CheckGet(t *testing.T, where string, db *DB, roptions *ReadOptions, key, expected []byte) {
 	getValue, err := db.Get(roptions, key)
 
