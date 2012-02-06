@@ -17,11 +17,11 @@ func (e DatabaseError) Error() string {
 
 // DB is a reusabe handle to a LevelDB database on disk, created by Open.
 //
-// To avoid memory and file descriptor leaks, call *DB.Close() when you are
+// To avoid memory and file descriptor leaks, call Close() when you are
 // through with the handle.
 //
-// All methods on a DB instance are thread-safe except for the Close()
-// method. Calls to any DB method made after Close() will panic.
+// All methods on a DB instance are thread-safe except for Close(). Calls to
+// any DB method made after Close() will panic.
 type DB struct {
 	Ldb *C.leveldb_t
 }
@@ -245,7 +245,6 @@ func (db *DB) ReleaseSnapshot(snap *C.leveldb_snapshot_t) {
 // the underlying handle.
 //
 // Any attempts to use the DB after Close is called will panic.
-//
 func (db *DB) Close() {
 	C.leveldb_close(db.Ldb)
 }

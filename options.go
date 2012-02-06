@@ -78,6 +78,8 @@ func (o *Options) Close() {
 // The comparator that created a database must be the same one (technically,
 // one with the same name string) that is used to perform read and write
 // operations.
+//
+// The default *C.leveldb_comparator_t is usually sufficient.
 func (o *Options) SetComparator(cmp *C.leveldb_comparator_t) {
 	C.leveldb_options_set_comparator(o.Opt, cmp)
 }

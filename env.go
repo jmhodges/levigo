@@ -4,7 +4,7 @@ package levigo
 // #include "levigo.h"
 import "C"
 
-// Env is system call environment used by a database.
+// Env is a system call environment used by a database.
 //
 // Typically, NewDefaultEnv is all you need. Advanced users may create their
 // own Env with a *C.leveldb_env_t of their own creation.

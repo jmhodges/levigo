@@ -5,9 +5,9 @@ package levigo
 // #include "levigo.h"
 import "C"
 
-// Cache is a cached used to store data read from data in memory.
+// Cache is a cache used to store data read from data in memory.
 //
-// Typically, NewLRUCache is all you will need, but advanced users may
+// Typically, NewLRUCache() is all you will need, but advanced users may
 // implement their own *C.leveldb_cache_t and create a *Cache
 //
 // To prevent memory leaks, a *Cache must have Close() called on it when it is
