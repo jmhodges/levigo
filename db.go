@@ -229,8 +229,12 @@ func (db *DB) PropertyValue(propName string) string {
 // NewSnapshot creates a new snapshot of the database.
 //
 // The snapshot, when used in a ReadOptions, provides a consistent view of
-// state of the database at teh time the snapshot was created.  database and
-// returns a handle to it.
+// state of the database at the the snapshot was created.
+//
+// To prevent memory leaks and resource strain in the database, the snapshot
+// returned must be released with this DB's ReleaseSnapshot() method.
+//
+// See the LevelDB C++ documentation docs for details.
 func (db *DB) NewSnapshot() *C.leveldb_snapshot_t {
 	return C.leveldb_create_snapshot(db.Ldb)
 }
