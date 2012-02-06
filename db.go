@@ -15,7 +15,7 @@ func (e DatabaseError) Error() string {
 	return string(e)
 }
 
-// DB is a reusabe handle to a LevelDB database on disk, created by Open.
+// DB is a reusable handle to a LevelDB database on disk, created by Open.
 //
 // To avoid memory and file descriptor leaks, call Close() when you are
 // through with the handle.
