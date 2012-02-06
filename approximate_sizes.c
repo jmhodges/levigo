@@ -1,5 +1,7 @@
 #include "levigo.h"
 
+// This function exists only to clean up lack-of-const warnings when
+// leveldb_approximate_sizes is called from Go-land.
 void levigo_leveldb_approximate_sizes(
     leveldb_t* db,
     int num_ranges,
