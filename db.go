@@ -132,7 +132,7 @@ func (db *DB) Write(wo *WriteOptions, w *WriteBatch) error {
 	return nil
 }
 
-func (db *DB) Iterator(ro *ReadOptions) *Iterator {
+func (db *DB) NewIterator(ro *ReadOptions) *Iterator {
 	it := C.leveldb_create_iterator(db.Ldb, ro.Opt)
 	return &Iterator{Iter: it}
 }

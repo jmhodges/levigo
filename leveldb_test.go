@@ -83,7 +83,7 @@ func TestC(t *testing.T) {
 	// }
 	wb.Close()
 
-	iter := db.Iterator(roptions)
+	iter := db.NewIterator(roptions)
 	if iter.Valid() {
 		t.Errorf("Read iterator should not be valid, yet")
 	}
