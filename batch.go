@@ -9,7 +9,7 @@ import (
 )
 
 type WriteBatch struct {
-	Wbatch *C.leveldb_writebatch_t
+	wbatch *C.leveldb_writebatch_t
 }
 
 func NewWriteBatch() *WriteBatch {
@@ -17,24 +17,24 @@ func NewWriteBatch() *WriteBatch {
 	return &WriteBatch{wb}
 }
 
-func DestroyWriteBatch(w *WriteBatch) {
-	C.leveldb_writebatch_destroy(w.Wbatch)
+func (w *WriteBatch) Close() {
+	C.leveldb_writebatch_destroy(w.wbatch)
 }
 
 func (w *WriteBatch) Put(key, value []byte) {
 	// leveldb_writebatch_put, and _delete call memcpy() (by way of
 	// Memtable::Add) when called, so we do not need to worry about these
 	// []byte being reclaimed by GC.
-	C.leveldb_writebatch_put(w.Wbatch,
+	C.leveldb_writebatch_put(w.wbatch,
 		(*C.char)(unsafe.Pointer(&key[0])), C.size_t(len(key)),
 		(*C.char)(unsafe.Pointer(&value[0])), C.size_t(len(value)))
 }
 
 func (w *WriteBatch) Delete(key []byte) {
-	C.leveldb_writebatch_delete(w.Wbatch,
+	C.leveldb_writebatch_delete(w.wbatch,
 		(*C.char)(unsafe.Pointer(&key[0])), C.size_t(len(key)))
 }
 
 func (w *WriteBatch) Clear() {
-	C.leveldb_writebatch_clear(w.Wbatch)
+	C.leveldb_writebatch_clear(w.wbatch)
 }

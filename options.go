@@ -27,17 +27,9 @@ func NewOptions() *Options {
 	return &Options{opt}
 }
 
-func DestroyOptions(o *Options) {
-	C.leveldb_options_destroy(o.Opt)
-}
-
 func NewReadOptions() *ReadOptions {
 	opt := C.leveldb_readoptions_create()
 	return &ReadOptions{opt}
-}
-
-func DestroyReadOptions(ro *ReadOptions) {
-	C.leveldb_readoptions_destroy(ro.Opt)
 }
 
 func NewWriteOptions() *WriteOptions {
@@ -45,8 +37,8 @@ func NewWriteOptions() *WriteOptions {
 	return &WriteOptions{opt}
 }
 
-func DestroyWriteOptions(wo *WriteOptions) {
-	C.leveldb_writeoptions_destroy(wo.Opt)
+func (o *Options) Close() {
+	C.leveldb_options_destroy(o.Opt)
 }
 
 func (o *Options) SetComparator(cmp *C.leveldb_comparator_t) {
@@ -58,12 +50,12 @@ func (o *Options) SetErrorIfExists(error_if_exists bool) {
 	C.leveldb_options_set_error_if_exists(o.Opt, eie)
 }
 
-func (o *Options) SetCache(cache *C.leveldb_cache_t) {
-	C.leveldb_options_set_cache(o.Opt, cache)
+func (o *Options) SetCache(cache *Cache) {
+	C.leveldb_options_set_cache(o.Opt, cache.Cache)
 }
 
-func (o *Options) SetEnv(env *C.leveldb_env_t) {
-	C.leveldb_options_set_env(o.Opt, env)
+func (o *Options) SetEnv(env *Env) {
+	C.leveldb_options_set_env(o.Opt, env.Env)
 }
 
 func (o *Options) SetInfoLog(log *C.leveldb_logger_t) {
@@ -98,6 +90,10 @@ func (o *Options) SetCreateIfMissing(b bool) {
 	C.leveldb_options_set_create_if_missing(o.Opt, boolToUchar(b))
 }
 
+func (ro *ReadOptions) Close() {
+	C.leveldb_readoptions_destroy(ro.Opt)
+}
+
 func (ro *ReadOptions) SetVerifyChecksums(b bool) {
 	C.leveldb_readoptions_set_verify_checksums(ro.Opt, boolToUchar(b))
 }
@@ -108,6 +104,10 @@ func (ro *ReadOptions) SetFillCache(b bool) {
 
 func (ro *ReadOptions) SetSnapshot(snap *C.leveldb_snapshot_t) {
 	C.leveldb_readoptions_set_snapshot(ro.Opt, snap)
+}
+
+func (wo *WriteOptions) Close() {
+	C.leveldb_writeoptions_destroy(wo.Opt)
 }
 
 func (wo *WriteOptions) SetSync(b bool) {

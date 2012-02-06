@@ -81,7 +81,7 @@ func TestC(t *testing.T) {
 	// if wbiter.pos != 3 {
 	// 	t.Errorf("After Iterate, on the wrong pos: %d", wbiter.pos)
 	// }
-	DestroyWriteBatch(wb)
+	wb.Close()
 
 	iter := db.Iterator(roptions)
 	if iter.Valid() {
@@ -107,7 +107,7 @@ func TestC(t *testing.T) {
 	if iter.GetError() != nil {
 		t.Errorf("Read iterator has an error we didn't expect: %v", iter.GetError())
 	}
-	DestroyIterator(iter)
+	iter.Close()
 
 	// approximate sizes
 	n := 20000
@@ -174,12 +174,12 @@ func TestC(t *testing.T) {
 
 	// cleanup
 	db.Close()
-	DestroyOptions(options)
-	DestroyReadOptions(roptions)
-	DestroyWriteOptions(woptions)
-	DestroyCache(cache)
+	options.Close()
+	roptions.Close()
+	woptions.Close()
+	cache.Close()
 	// DestroyComparator(cmp)
-	DestroyEnv(env)
+	env.Close()
 }
 
 func TestNilSlicesInDb(t *testing.T) {

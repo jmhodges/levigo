@@ -5,10 +5,14 @@ package levigo
 // #include "levigo.h"
 import "C"
 
-func NewLRUCache(capacity int) *C.leveldb_cache_t {
-	return C.leveldb_cache_create_lru(C.size_t(capacity))
+type Cache struct {
+	Cache *C.leveldb_cache_t
 }
 
-func DestroyCache(cache *C.leveldb_cache_t) {
-	C.leveldb_cache_destroy(cache)
+func NewLRUCache(capacity int) *Cache {
+	return &Cache{C.leveldb_cache_create_lru(C.size_t(capacity))}
+}
+
+func (c *Cache) Close() {
+	C.leveldb_cache_destroy(c.Cache)
 }

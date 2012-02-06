@@ -4,10 +4,14 @@ package levigo
 // #include "levigo.h"
 import "C"
 
-func NewDefaultEnv() *C.leveldb_env_t {
-	return C.leveldb_create_default_env()
+type Env struct {
+	Env *C.leveldb_env_t
 }
 
-func DestroyEnv(env *C.leveldb_env_t) {
-	C.leveldb_env_destroy(env)
+func NewDefaultEnv() *Env {
+	return &Env{C.leveldb_create_default_env()}
+}
+
+func (env *Env) Close() {
+	C.leveldb_env_destroy(env.Env)
 }

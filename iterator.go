@@ -63,7 +63,7 @@ func (it *Iterator) GetError() error {
 	return nil
 }
 
-func DestroyIterator(it *Iterator) {
+func (it *Iterator) Close() {
 	C.leveldb_iter_destroy(it.Iter)
 	it.Iter = nil
 }
