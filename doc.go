@@ -9,9 +9,9 @@ levigo.Open() opens and creates databases.
 	db, err := levigo.Open("/path/to/db", opts)
 
 *DB.Get(), .Put() and .Delete(), respectively, get the data related to a
- single key, put data for a single key into the database, and deletes data for
- a single key. Do not worry about copying the keys and values in the arguments
- and return values of these methods. LevelDB does this for you.
+single key, put data for a single key into the database, and deletes data for
+a single key. Do not worry about copying the keys and values in the arguments
+and return values of these methods. LevelDB does this for you.
 
 	ro := levigo.NewReadOptions()
 	wo := levigo.NewWriteOptions()
@@ -23,7 +23,7 @@ levigo.Open() opens and creates databases.
 	...
 	err = db.Delete(wo, []byte("key"))
 
- For bulk reads, use an Iterator. For ones that you do not want to disturb
+For bulk reads, use an Iterator. For ones that you do not want to disturb
 your live traffic, be sure to call SetFillCache(false) on the ReadOptions you
 use when creating the Iterator.
 
