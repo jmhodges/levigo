@@ -45,5 +45,4 @@ Batching and atomically making writes can be performed with a WriteBatch and
 	wb.Put([]byte("anotheradded"), []byte("more"))
 	err := db.Write(wo, wb)
 */
-
 package levigo
