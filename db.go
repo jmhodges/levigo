@@ -35,7 +35,8 @@ type Range struct {
 
 // Open opens a database.
 //
-// Creating a new database is done by calling SetCreateIfMissing(true) on the *Options passed to Open.
+// Creating a new database is done by calling SetCreateIfMissing(true) on the
+// *Options passed to Open.
 //
 // It is usually wise to set a Cache object on the *Options with SetCache() to
 // keep recently used data from that database in memory.

@@ -27,19 +27,19 @@ func (e IteratorError) Error() string {
 // will return a nil on iterators that are simply invalid. Given that
 // behavior, GetError() is not a replacement for a Valid().
 //
+// A typical use looks like:
+//
+// 	db := levigo.Open(...)
+//
+// 	it := db.NewIterator(readOpts)
+// 	defer it.Close()
+// 	it.Seek(mykey)
+// 	for it; it.Valid(); it.Next() {
+// 		useKeyAndValue(it.Key(), it.Value())
+// 	}
+//
 // To prevent memory leaks, an *Iterator must have Close() called on it when
 // it is no longer needed by the program.
-//
-// The typical pattern of use is:
-//
-//     db := levigo.Open(...)
-//
-//     it := db.NewIterator(readOpts)
-//     defer it.Close()
-//     it.Seek(mykey)
-//     for it; it.Valid(); it.Next() {
-//        useKeyAndValue(it.Key(), it.Value())
-//     }
 type Iterator struct {
 	Iter *C.leveldb_iterator_t
 }

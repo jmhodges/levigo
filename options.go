@@ -4,6 +4,7 @@ package levigo
 // #include "levigo.h"
 import "C"
 
+// Compression arguments for Options.SetCompression.
 const (
 	NoCompression     = 0
 	SnappyCompression = 1
@@ -151,8 +152,8 @@ func (o *Options) SetBlockRestartInterval(n int) {
 // SetCompression sets whether to compress blocks using the specified
 // compresssion algorithm.
 //
-// The default is SnappyCompression and Snappy compression is fast enough that
-// it is unlikely you want to turn it off.. The other options is
+// The default value is SnappyCompression and it is fast
+// enough that it is unlikely you want to turn it off. The other option is
 // NoCompression.
 //
 // If the LevelDB library was built without Snappy compression enabled, the
