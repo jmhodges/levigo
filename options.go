@@ -4,10 +4,13 @@ package levigo
 // #include "levigo.h"
 import "C"
 
-// Compression arguments for Options.SetCompression.
+// CompressionOpt is a value for Options.SetCompression.
+type CompressionOpt int
+
+// Known compression arguments for Options.SetCompression.
 const (
-	NoCompression     = 0
-	SnappyCompression = 1
+	NoCompression     = CompressionOpt(0)
+	SnappyCompression = CompressionOpt(1)
 )
 
 // Options represent all of the available options when opening a database with
@@ -158,7 +161,7 @@ func (o *Options) SetBlockRestartInterval(n int) {
 //
 // If the LevelDB library was built without Snappy compression enabled, the
 // SnappyCompression setting will be ignored.
-func (o *Options) SetCompression(t int) {
+func (o *Options) SetCompression(t CompressionOpt) {
 	C.leveldb_options_set_compression(o.Opt, C.int(t))
 }
 
