@@ -17,7 +17,7 @@ return values of these methods; LevelDB will copy them for you.
 	ro := levigo.NewReadOptions()
 	wo := levigo.NewWriteOptions()
 	// if ro and wo are not used again, be sure to Close them.
- 	data, err := db.Get(ro, []byte("key"))
+	data, err := db.Get(ro, []byte("key"))
 	...
 	err = db.Put(wo, []byte("anotherkey"), data)
 	...
