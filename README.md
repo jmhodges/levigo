@@ -2,13 +2,15 @@
 
 levigo is a Go wrapper for LevelDB.
 
+See the godoc for API information.
+
 Questions answered at `golang-nuts@googlegroups.com`.
 
 ## Building
 
 You'll need the a shared library build of LevelDB installed on your
 machine. Right now, that means applying my [latest patch for LevelDB's
-Makefile](http://code.google.com/p/leveldb/issues/detail?id=27#c10).
+Makefile](http://code.google.com/p/leveldb/issues/detail?id=27#c11).
 
 Now, suppose you built the shared LevelDB library in /path/to/lib and the
 headers were installed in /path/to/include. In your clone of levigo, you'll
