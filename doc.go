@@ -10,8 +10,8 @@ levigo.Open() opens and creates databases.
 
 *DB.Get(), .Put() and .Delete(), respectively, get the data related to a
 single key, put data for a single key into the database, and deletes data for
-a single key. Do not worry about copying the keys and values in the arguments
-and return values of these methods. LevelDB does this for you.
+a single key. Don't worry about copying the byte slices in the arguments and
+return values of these methods; LevelDB will copy them for you.
 
 	ro := levigo.NewReadOptions()
 	wo := levigo.NewWriteOptions()
