@@ -13,7 +13,7 @@ machine. Right now, that means applying my [latest patch for LevelDB's
 Makefile](http://code.google.com/p/leveldb/issues/detail?id=27#c11).
 
 Now, suppose you built the shared LevelDB library in /path/to/lib and the
-headers were installed in /path/to/include. In your clone of levigo, you'll
+headers were installed in /path/to/include. To install levigo remotely, you'll
 run:
 
     CGO_CFLAGS="-I/path/to/leveldb/include" CGO_LDFLAGS="-L/path/to/lib" go get github.com/jmhodges/levigo
