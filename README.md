@@ -23,5 +23,4 @@ and there you go.
 
 ## Caveats
 
-Comparators must be written in C in your own library. And means to be iterate
-over WriteBatches must be similarly created.
+Comparators and WriteBatch iterators must be written in C in your own library.
