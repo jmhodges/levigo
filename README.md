@@ -8,7 +8,7 @@ Questions answered at `golang-nuts@googlegroups.com`.
 
 ## Building
 
-You'll need the a shared library build of LevelDB installed on your
+You'll need the shared library build of LevelDB installed on your
 machine. Right now, that means applying my [latest patch for LevelDB's
 Makefile](http://code.google.com/p/leveldb/issues/detail?id=27#c11).
 
