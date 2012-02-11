@@ -1,4 +1,6 @@
 #!/bin/bash
+set -o nounset
+set -o errexit
 
 git checkout master
 godoc -html . > godoc.html
