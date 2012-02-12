@@ -66,7 +66,7 @@ use when creating the Iterator.
 ro.SetFillCache(false)
 it := db.NewIterator(ro)
 defer it.Close()
-for it; it.Valid(); it.Next() {
+for it = it; it.Valid(); it.Next() {
 	munge(it.Key(), it.Value())
 }
 </pre>
@@ -762,7 +762,7 @@ A typical use looks like:
 it := db.NewIterator(readOpts)
 defer it.Close()
 it.Seek(mykey)
-for it; it.Valid(); it.Next() {
+for it = it; it.Valid(); it.Next() {
 	useKeyAndValue(it.Key(), it.Value())
 }
 </pre>
