@@ -34,7 +34,7 @@ func (e IteratorError) Error() string {
 // 	it := db.NewIterator(readOpts)
 // 	defer it.Close()
 // 	it.Seek(mykey)
-// 	for it; it.Valid(); it.Next() {
+// 	for it = it; it.Valid(); it.Next() {
 // 		useKeyAndValue(it.Key(), it.Value())
 // 	}
 //

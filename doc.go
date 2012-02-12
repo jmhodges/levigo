@@ -31,7 +31,7 @@ use when creating the Iterator.
 	ro.SetFillCache(false)
 	it := db.NewIterator(ro)
 	defer it.Close()
-	for it; it.Valid(); it.Next() {
+	for it = it; it.Valid(); it.Next() {
 		munge(it.Key(), it.Value())
 	}
 
