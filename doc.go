@@ -29,7 +29,7 @@ use when creating the Iterator.
 
 	ro := levigo.NewReadOptions()
 	ro.SetFillCache(false)
-	t := db.NewIterator(ro)
+	it := db.NewIterator(ro)
 	defer it.Close()
 	for it; it.Valid(); it.Next() {
 		munge(it.Key(), it.Value())
