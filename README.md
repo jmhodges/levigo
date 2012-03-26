@@ -11,7 +11,7 @@ Questions answered at `golang-nuts@googlegroups.com`.
 
 You'll need the shared library build of LevelDB installed on your
 machine. Right now, that means applying my [latest patch for LevelDB's
-Makefile](http://code.google.com/p/leveldb/issues/detail?id=27#c11).
+Makefile](http://code.google.com/p/leveldb/issues/detail?id=27#c14).
 
 Now, suppose you built the shared LevelDB library in /path/to/lib and the
 headers were installed in /path/to/include. To install levigo remotely, you'll
