@@ -161,7 +161,7 @@ func (db *DB) Delete(wo *WriteOptions, key []byte) error {
 	return nil
 }
 
-// Write atomically writes the *WriteBatch to disk.
+// Write atomically writes a *WriteBatch to disk.
 func (db *DB) Write(wo *WriteOptions, w *WriteBatch) error {
 	var errStr *C.char
 	C.leveldb_write(db.Ldb, wo.Opt, w.wbatch, &errStr)

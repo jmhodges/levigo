@@ -36,7 +36,7 @@ use when creating the Iterator.
 		munge(it.Key(), it.Value())
 	}
 
-Batching and atomically making writes can be performed with a WriteBatch and
+Batched, atomic writes can be performed with a WriteBatch and
 *DB.Write().
 
 	wb := levigo.NewWriteBatch()
