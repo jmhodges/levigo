@@ -2,6 +2,7 @@
 <html>
   <head>
     <link rel="stylesheet" href="./bootstrap/css/bootstrap.min.css" type="text/css" media="screen" />
+    <meta charset="utf-8" />
     <style type="text/css">
       code {
         padding: 3px 4px;
@@ -24,15 +25,20 @@
 			<dd><code>import "github.com/jmhodges/levigo"</code></dd>
 			</dl>
 			<dl>
-			<dd><a href="#overview">Overview</a></dd>
+			<dd><a href="#overview" class="overviewLink">Overview</a></dd>
 			<dd><a href="#index">Index</a></dd>
 			
 			
 			</dl>
 		</div>
-		<h2 id="overview">Overview</h2>
 		<!-- The package's Name is printed as title by the top-level template -->
-		<p>
+		<div id="overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				<p>
 Package levigo provides the ability to create and access LevelDB databases.
 </p>
 <p>
@@ -73,7 +79,7 @@ for it = it; it.Valid(); it.Next() {
 }
 </pre>
 <p>
-Batching and atomically making writes can be performed with a WriteBatch and
+Batched, atomic writes can be performed with a WriteBatch and
 *DB.Write().
 </p>
 <pre>wb := levigo.NewWriteBatch()
@@ -84,6 +90,8 @@ wb.Put([]byte(&#34;anotheradded&#34;), []byte(&#34;more&#34;))
 err := db.Write(wo, wb)
 </pre>
 
+			</div>
+		</div>
 		
 	
 		<h2 id="index">Index</h2>
@@ -532,7 +540,7 @@ keep recently used data from that database in memory.
 
 			
 				
-				<h3 id="DB.Close">func (*DB) <a href="/target/db.go?s=7386:7407#L243">Close</a></h3>
+				<h3 id="DB.Close">func (*DB) <a href="/target/db.go?s=7398:7419#L243">Close</a></h3>
 				<pre>func (db *DB) Close()</pre>
 				<p>
 Close closes the database, rendering it unusable for I/O, by deallocating
@@ -546,7 +554,7 @@ Any attempts to use the DB after Close is called will panic.
 				
 			
 				
-				<h3 id="DB.Delete">func (*DB) <a href="/target/db.go?s=3872:3928#L138">Delete</a></h3>
+				<h3 id="DB.Delete">func (*DB) <a href="/target/db.go?s=3886:3942#L138">Delete</a></h3>
 				<pre>func (db *DB) Delete(wo *WriteOptions, key []byte) error</pre>
 				<p>
 Delete removes the data associated with the key from the database.
@@ -560,7 +568,7 @@ them before returning.
 				
 			
 				
-				<h3 id="DB.Get">func (*DB) <a href="/target/db.go?s=3258:3320#L112">Get</a></h3>
+				<h3 id="DB.Get">func (*DB) <a href="/target/db.go?s=3273:3335#L113">Get</a></h3>
 				<pre>func (db *DB) Get(ro *ReadOptions, key []byte) ([]byte, error)</pre>
 				<p>
 Get returns the data associated with the key from the database.
@@ -579,7 +587,7 @@ them before returning.
 				
 			
 				
-				<h3 id="DB.GetApproximateSizes">func (*DB) <a href="/target/db.go?s=5280:5338#L184">GetApproximateSizes</a></h3>
+				<h3 id="DB.GetApproximateSizes">func (*DB) <a href="/target/db.go?s=5292:5350#L184">GetApproximateSizes</a></h3>
 				<pre>func (db *DB) GetApproximateSizes(ranges []Range) []uint64</pre>
 				<p>
 GetApproximateSizes returns the approximate number of bytes of file system
@@ -594,7 +602,7 @@ Range.Limit.
 				
 			
 				
-				<h3 id="DB.NewIterator">func (*DB) <a href="/target/db.go?s=4935:4987#L174">NewIterator</a></h3>
+				<h3 id="DB.NewIterator">func (*DB) <a href="/target/db.go?s=4947:4999#L174">NewIterator</a></h3>
 				<pre>func (db *DB) NewIterator(ro *ReadOptions) *Iterator</pre>
 				<p>
 NewIterator returns an *Iterator over the the database that uses the
@@ -615,7 +623,7 @@ Similiarly, *ReadOptions.SetSnapshot() is also useful.
 				
 			
 				
-				<h3 id="DB.NewSnapshot">func (*DB) <a href="/target/db.go?s=6912:6961#L229">NewSnapshot</a></h3>
+				<h3 id="DB.NewSnapshot">func (*DB) <a href="/target/db.go?s=6924:6973#L229">NewSnapshot</a></h3>
 				<pre>func (db *DB) NewSnapshot() *C.leveldb_snapshot_t</pre>
 				<p>
 NewSnapshot creates a new snapshot of the database.
@@ -636,7 +644,7 @@ See the LevelDB C++ documentation docs for details.
 				
 			
 				
-				<h3 id="DB.PropertyValue">func (*DB) <a href="/target/db.go?s=6329:6380#L214">PropertyValue</a></h3>
+				<h3 id="DB.PropertyValue">func (*DB) <a href="/target/db.go?s=6341:6392#L214">PropertyValue</a></h3>
 				<pre>func (db *DB) PropertyValue(propName string) string</pre>
 				<p>
 PropertyValue returns the value of a database property.
@@ -668,7 +676,7 @@ them before returning.
 				
 			
 				
-				<h3 id="DB.ReleaseSnapshot">func (*DB) <a href="/target/db.go?s=7111:7168#L235">ReleaseSnapshot</a></h3>
+				<h3 id="DB.ReleaseSnapshot">func (*DB) <a href="/target/db.go?s=7123:7180#L235">ReleaseSnapshot</a></h3>
 				<pre>func (db *DB) ReleaseSnapshot(snap *C.leveldb_snapshot_t)</pre>
 				<p>
 ReleaseSnapshot removes the snapshot from the database&#39;s list of snapshots,
@@ -679,10 +687,10 @@ and deallocates it.
 				
 			
 				
-				<h3 id="DB.Write">func (*DB) <a href="/target/db.go?s=4234:4292#L155">Write</a></h3>
+				<h3 id="DB.Write">func (*DB) <a href="/target/db.go?s=4246:4304#L155">Write</a></h3>
 				<pre>func (db *DB) Write(wo *WriteOptions, w *WriteBatch) error</pre>
 				<p>
-Write atomically writes the *WriteBatch to disk.
+Write atomically writes a *WriteBatch to disk.
 </p>
 
 				
