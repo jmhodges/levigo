@@ -93,18 +93,19 @@ func (db *DB) Put(wo *WriteOptions, key, value []byte) error {
 	// leveldb_put, _get, and _delete call memcpy() (by way of Memtable::Add)
 	// when called, so we do not need to worry about these []byte being
 	// reclaimed by GC.
-	var k *C.char
+	var k, v *C.char
 	if len(key) != 0 {
 		k = (*C.char)(unsafe.Pointer(&key[0]))
 	}
-	var v *C.char
 	if len(value) != 0 {
 		v = (*C.char)(unsafe.Pointer(&value[0]))
 	}
-	C.leveldb_put(db.Ldb, wo.Opt,
-		k, C.size_t(len(key)),
-		v, C.size_t(len(value)),
-		&errStr)
+
+	lenk := len(key)
+	lenv := len(value)
+	C.leveldb_put(
+		db.Ldb, wo.Opt, k, C.size_t(lenk), v, C.size_t(lenv), &errStr)
+
 	if errStr != nil {
 		return DatabaseError(C.GoString(errStr))
 	}
@@ -127,9 +128,8 @@ func (db *DB) Get(ro *ReadOptions, key []byte) ([]byte, error) {
 		k = (*C.char)(unsafe.Pointer(&key[0]))
 	}
 
-	value := C.leveldb_get(db.Ldb, ro.Opt,
-		k, C.size_t(len(key)),
-		&vallen, &errStr)
+	value := C.leveldb_get(
+		db.Ldb, ro.Opt, k, C.size_t(len(key)), &vallen, &errStr)
 
 	if errStr != nil {
 		return nil, DatabaseError(C.GoString(errStr))
@@ -152,9 +152,9 @@ func (db *DB) Delete(wo *WriteOptions, key []byte) error {
 		k = (*C.char)(unsafe.Pointer(&key[0]))
 	}
 
-	C.leveldb_delete(db.Ldb, wo.Opt,
-		k, C.size_t(len(key)),
-		&errStr)
+	C.leveldb_delete(
+		db.Ldb, wo.Opt, k, C.size_t(len(key)), &errStr)
+
 	if errStr != nil {
 		return DatabaseError(C.GoString(errStr))
 	}
