@@ -2,17 +2,17 @@
 
 Package levigo provides the ability to create and access LevelDB databases.
 
-levigo.Open() opens and creates databases.
+levigo.Open opens and creates databases.
 
 	opts := levigo.NewOptions()
 	opts.SetCache(levigo.NewLRUCache(3<<30))
 	opts.SetCreateIfMissing(true)
 	db, err := levigo.Open("/path/to/db", opts)
 
-DB.Get(), .Put() and .Delete(), respectively, get the data related to a
-single key, put data for a single key into the database, and deletes data for
-a single key. Don't worry about copying the byte slices in the arguments and
-return values of these methods; LevelDB will copy them for you.
+DB.Get, DB.Put and DB.Delete, respectively, get the data related to a single
+key, put data for a single key into the database, and deletes data for a
+single key. You can modify the []byte passed in and returned out of
+these methods at any time.
 
 	ro := levigo.NewReadOptions()
 	wo := levigo.NewWriteOptions()
@@ -37,7 +37,7 @@ use when creating the Iterator.
 	}
 
 Batched, atomic writes can be performed with a WriteBatch and
-DB.Write().
+DB.Write.
 
 	wb := levigo.NewWriteBatch()
 	// defer wb.Close or use wb.Clear and reuse.
