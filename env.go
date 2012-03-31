@@ -9,7 +9,7 @@ import "C"
 // Typically, NewDefaultEnv is all you need. Advanced users may create their
 // own Env with a *C.leveldb_env_t of their own creation.
 //
-// To prevent memory leaks, an Env must have Close() called on it when it is
+// To prevent memory leaks, an Env must have Close called on it when it is
 // no longer needed by the program.
 type Env struct {
 	Env *C.leveldb_env_t

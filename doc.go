@@ -40,7 +40,7 @@ Batched, atomic writes can be performed with a WriteBatch and
 DB.Write().
 
 	wb := levigo.NewWriteBatch()
-	// defer wb.Close() or use wb.Clear() and reuse.
+	// defer wb.Close or use wb.Clear and reuse.
 	wb.Delete([]byte("removed"))
 	wb.Put([]byte("added"), []byte("data"))
 	wb.Put([]byte("anotheradded"), []byte("more"))

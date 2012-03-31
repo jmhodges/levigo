@@ -18,14 +18,14 @@ func (e IteratorError) Error() string {
 // way to seek to specific keys and iterate through the keyspace from
 // that point, as well as access the values of those keys.
 //
-// Care must be taken when using an Iterator. If the method Valid() returns
-// false, calls to Key(), Value(), Next(), and Prev() will result in
-// panics. However, Seek(), SeekToFirst(), SeekToLast(), GetError(), Valid()
-// and Close() will still be safe to call.
+// Care must be taken when using an Iterator. If the method Valid returns
+// false, calls to Key, Value, Next, and Prev will result in
+// panics. However, Seek, SeekToFirst, SeekToLast, GetError, Valid
+// and Close will still be safe to call.
 //
-// GetError() will only return an error in the event of a LevelDB error. It
+// GetError will only return an error in the event of a LevelDB error. It
 // will return a nil on iterators that are simply invalid. Given that
-// behavior, GetError() is not a replacement for a Valid().
+// behavior, GetError is not a replacement for a Valid.
 //
 // A typical use looks like:
 //
@@ -38,82 +38,82 @@ func (e IteratorError) Error() string {
 // 		useKeyAndValue(it.Key(), it.Value())
 // 	}
 //
-// To prevent memory leaks, an Iterator must have Close() called on it when
+// To prevent memory leaks, an Iterator must have Close called on it when
 // it is no longer needed by the program.
 type Iterator struct {
 	Iter *C.leveldb_iterator_t
 }
 
-// Valid() returns false only when an Iterator has iterated past either the
+// Valid returns false only when an Iterator has iterated past either the
 // first or the last key in the database.
 func (it *Iterator) Valid() bool {
 	return ucharToBool(C.leveldb_iter_valid(it.Iter))
 }
 
-// Key() returns a copy the key in the database the iterator currently holds.
+// Key returns a copy the key in the database the iterator currently holds.
 //
-// If Valid() returns false, this method will panic.
+// If Valid returns false, this method will panic.
 func (it *Iterator) Key() []byte {
 	var klen C.size_t
 	kdata := C.leveldb_iter_key(it.Iter, &klen)
 	return C.GoBytes(unsafe.Pointer(kdata), C.int(klen))
 }
 
-// Value() returns a copy of the value in the database the iterator currently
+// Value returns a copy of the value in the database the iterator currently
 // holds.
 //
-// If Valid() returns false, this method will panic.
+// If Valid returns false, this method will panic.
 func (it *Iterator) Value() []byte {
 	var vlen C.size_t
 	vdata := C.leveldb_iter_value(it.Iter, &vlen)
 	return C.GoBytes(unsafe.Pointer(vdata), C.int(vlen))
 }
 
-// Next() moves the iterator to the next sequential key in the database, as
+// Next moves the iterator to the next sequential key in the database, as
 // defined by the Comparator in the ReadOptions.
 //
-// If Valid() returns false, this method will panic.
+// If Valid returns false, this method will panic.
 func (it *Iterator) Next() {
 	C.leveldb_iter_next(it.Iter)
 }
 
-// Prev() moves the iterator to the previous sequential key in the database,
+// Prev moves the iterator to the previous sequential key in the database,
 // as defined by the Comparator in the ReadOptions used to create this
 // Iterator.
 //
-// If Valid() returns false, this method will panic.
+// If Valid returns false, this method will panic.
 func (it *Iterator) Prev() {
 	C.leveldb_iter_prev(it.Iter)
 }
 
-// SeekToFirst() moves the iterator to the first key in the database, as
+// SeekToFirst moves the iterator to the first key in the database, as
 // defined by the Comparator in the ReadOptions used to create this Iterator.
 //
-// This method is safe to call when Valid() returns false.
+// This method is safe to call when Valid returns false.
 func (it *Iterator) SeekToFirst() {
 	C.leveldb_iter_seek_to_first(it.Iter)
 }
 
-// SeekToLast() moves the iterator to the last key in the database, as
+// SeekToLast moves the iterator to the last key in the database, as
 // defined by the Comparator in the ReadOptions used to create this Iterator.
 //
-// This method is safe to call when Valid() returns false.
+// This method is safe to call when Valid returns false.
 func (it *Iterator) SeekToLast() {
 	C.leveldb_iter_seek_to_last(it.Iter)
 }
 
-// Seek() moves the iterator the position of the key given or, if the key
+// Seek moves the iterator the position of the key given or, if the key
 // doesn't exist, the next key that does exist in the database. If the key
 // doesn't exist, and there is no next key, the Iterator becomes invalid.
 //
-// This method is safe to call when Valid() returns false.
+// This method is safe to call when Valid returns false.
 func (it *Iterator) Seek(key []byte) {
 	C.leveldb_iter_seek(it.Iter, (*C.char)(unsafe.Pointer(&key[0])), C.size_t(len(key)))
 }
 
-// GetError() returns an error from LevelDB found while iterating.
+// GetError returns an error from LevelDB found while iterating.
 //
-// This method is safe to call when Valid() returns false.
+// This method is safe to call when Valid returns false.
 func (it *Iterator) GetError() error {
 	var errStr *C.char
 	C.leveldb_iter_get_error(it.Iter, &errStr)

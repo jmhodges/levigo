@@ -17,11 +17,11 @@ func (e DatabaseError) Error() string {
 
 // DB is a reusable handle to a LevelDB database on disk, created by Open.
 //
-// To avoid memory and file descriptor leaks, call Close() when you are
+// To avoid memory and file descriptor leaks, call Close when you are
 // through with the handle.
 //
-// All methods on a DB instance are thread-safe except for Close(). Calls to
-// any DB method made after Close() will panic.
+// All methods on a DB instance are thread-safe except for Close. Calls to
+// any DB method made after Close will panic.
 type DB struct {
 	Ldb *C.leveldb_t
 }
@@ -38,7 +38,7 @@ type Range struct {
 // Creating a new database is done by calling SetCreateIfMissing(true) on the
 // Options passed to Open.
 //
-// It is usually wise to set a Cache object on the Options with SetCache() to
+// It is usually wise to set a Cache object on the Options with SetCache to
 // keep recently used data from that database in memory.
 func Open(dbname string, o *Options) (*DB, error) {
 	var errStr *C.char
@@ -180,7 +180,7 @@ func (db *DB) Write(wo *WriteOptions, w *WriteBatch) error {
 // data. This can be done by calling SetFillCache(false) on the ReadOptions
 // before passing it here.
 //
-// Similiarly, ReadOptions.SetSnapshot() is also useful.
+// Similiarly, ReadOptions.SetSnapshot is also useful.
 func (db *DB) NewIterator(ro *ReadOptions) *Iterator {
 	it := C.leveldb_create_iterator(db.Ldb, ro.Opt)
 	return &Iterator{Iter: it}
@@ -233,7 +233,7 @@ func (db *DB) PropertyValue(propName string) string {
 // state of the database at the the snapshot was created.
 //
 // To prevent memory leaks and resource strain in the database, the snapshot
-// returned must be released with this DB's ReleaseSnapshot() method.
+// returned must be released with this DB's ReleaseSnapshot method.
 //
 // See the LevelDB C++ documentation docs for details.
 func (db *DB) NewSnapshot() *C.leveldb_snapshot_t {
