@@ -38,7 +38,7 @@ func (e IteratorError) Error() string {
 // 		useKeyAndValue(it.Key(), it.Value())
 // 	}
 //
-// To prevent memory leaks, an *Iterator must have Close() called on it when
+// To prevent memory leaks, an Iterator must have Close() called on it when
 // it is no longer needed by the program.
 type Iterator struct {
 	Iter *C.leveldb_iterator_t

@@ -9,7 +9,7 @@ import (
 )
 
 // WriteBatch is a batching of Puts, and Deletes to be written atomically to a
-// database. A WriteBatch is written when passed to *DB.Write().
+// database. A WriteBatch is written when passed to DB.Write().
 //
 // To prevent memory leaks, call Close() when the program no longer needs the
 // WriteBatch object.
@@ -17,13 +17,13 @@ type WriteBatch struct {
 	wbatch *C.leveldb_writebatch_t
 }
 
-// NewWriteBatch creates a fully allocated *WriteBatch.
+// NewWriteBatch creates a fully allocated WriteBatch.
 func NewWriteBatch() *WriteBatch {
 	wb := C.leveldb_writebatch_create()
 	return &WriteBatch{wb}
 }
 
-// Close releases the underlying memory of a *WriteBatch.
+// Close releases the underlying memory of a WriteBatch.
 func (w *WriteBatch) Close() {
 	C.leveldb_writebatch_destroy(w.wbatch)
 }
@@ -51,7 +51,7 @@ func (w *WriteBatch) Delete(key []byte) {
 		(*C.char)(unsafe.Pointer(&key[0])), C.size_t(len(key)))
 }
 
-// Clear removes all the enqueued Put and Deletes in the *WriteBatch.
+// Clear removes all the enqueued Put and Deletes in the WriteBatch.
 func (w *WriteBatch) Clear() {
 	C.leveldb_writebatch_clear(w.wbatch)
 }

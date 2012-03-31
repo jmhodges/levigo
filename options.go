@@ -46,7 +46,7 @@ type WriteOptions struct {
 
 // NewOptions allocates a new Options object.
 //
-// To prevent memory leaks, the *Options returned must have DestroyOptions()
+// To prevent memory leaks, the Options returned must have DestroyOptions()
 // called on it when it is no longer needed by the program.
 func NewOptions() *Options {
 	opt := C.leveldb_options_create()
@@ -55,7 +55,7 @@ func NewOptions() *Options {
 
 // NewReadOptions allocates a new ReadOptions object.
 //
-// To prevent memory leaks, the *ReadOptions returned must have Close() called
+// To prevent memory leaks, the ReadOptions returned must have Close() called
 // on it when it is no longer needed by the program.
 func NewReadOptions() *ReadOptions {
 	opt := C.leveldb_readoptions_create()
@@ -64,7 +64,7 @@ func NewReadOptions() *ReadOptions {
 
 // NewWriteOptions allocates a new WriteOptions object.
 //
-// To prevent memory leaks, the *WriteOptions returned must have Close()
+// To prevent memory leaks, the WriteOptions returned must have Close()
 // called on it when it is no longer needed by the program.
 func NewWriteOptions() *WriteOptions {
 	opt := C.leveldb_writeoptions_create()
@@ -188,14 +188,14 @@ func (ro *ReadOptions) SetVerifyChecksums(b bool) {
 // underlying storage to be placed in the database cache, if the cache exists.
 //
 // It is useful to turn this off on ReadOptions that are used for
-// *DB.Iterator(), as it will prevent bulk scans from flushing out live user
+// DB.Iterator(), as it will prevent bulk scans from flushing out live user
 // data in the cache.
 func (ro *ReadOptions) SetFillCache(b bool) {
 	C.leveldb_readoptions_set_fill_cache(ro.Opt, boolToUchar(b))
 }
 
 // SetSnapshot causes reads to provided as they were when the passed in
-// Snapshot was created by *DB.NewSnapshot().
+// Snapshot was created by DB.NewSnapshot().
 //
 // See the LevelDB C++ documentation for details.
 func (ro *ReadOptions) SetSnapshot(snap *C.leveldb_snapshot_t) {

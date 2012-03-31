@@ -36,9 +36,9 @@ type Range struct {
 // Open opens a database.
 //
 // Creating a new database is done by calling SetCreateIfMissing(true) on the
-// *Options passed to Open.
+// Options passed to Open.
 //
-// It is usually wise to set a Cache object on the *Options with SetCache() to
+// It is usually wise to set a Cache object on the Options with SetCache() to
 // keep recently used data from that database in memory.
 func Open(dbname string, o *Options) (*DB, error) {
 	var errStr *C.char
@@ -161,7 +161,7 @@ func (db *DB) Delete(wo *WriteOptions, key []byte) error {
 	return nil
 }
 
-// Write atomically writes a *WriteBatch to disk.
+// Write atomically writes a WriteBatch to disk.
 func (db *DB) Write(wo *WriteOptions, w *WriteBatch) error {
 	var errStr *C.char
 	C.leveldb_write(db.Ldb, wo.Opt, w.wbatch, &errStr)
@@ -171,16 +171,16 @@ func (db *DB) Write(wo *WriteOptions, w *WriteBatch) error {
 	return nil
 }
 
-// NewIterator returns an *Iterator over the the database that uses the
+// NewIterator returns an Iterator over the the database that uses the
 // ReadOptions given.
 //
 // Often, this is used for large, offline bulk reads while serving live
 // traffic. In that case, it may be wise to disable caching so that the data
-// processed by the returned *Iterator does not displace the already cached
-// data. This can be done by calling SetFillCache(false) on the *ReadOptions
+// processed by the returned Iterator does not displace the already cached
+// data. This can be done by calling SetFillCache(false) on the ReadOptions
 // before passing it here.
 //
-// Similiarly, *ReadOptions.SetSnapshot() is also useful.
+// Similiarly, ReadOptions.SetSnapshot() is also useful.
 func (db *DB) NewIterator(ro *ReadOptions) *Iterator {
 	it := C.leveldb_create_iterator(db.Ldb, ro.Opt)
 	return &Iterator{Iter: it}
