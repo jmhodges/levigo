@@ -398,7 +398,7 @@ their own comparators in C in their own code.
 		
 			
 			
-			<h2 id="DestroyDatabase">func <a href="/target/db.go?s=1407:1460#L47">DestroyDatabase</a></h2>
+			<h2 id="DestroyDatabase">func <a href="/target/db.go?s=1405:1458#L47">DestroyDatabase</a></h2>
 			<pre>func DestroyDatabase(dbname string, o *Options) error</pre>
 			<p>
 DestroyDatabase removes a database entirely, removing everything from the
@@ -409,7 +409,7 @@ filesystem.
 		
 			
 			
-			<h2 id="RepairDatabase">func <a href="/target/db.go?s=1791:1843#L62">RepairDatabase</a></h2>
+			<h2 id="RepairDatabase">func <a href="/target/db.go?s=1789:1841#L62">RepairDatabase</a></h2>
 			<pre>func RepairDatabase(dbname string, o *Options) error</pre>
 			<p>
 RepairDatabase attempts to repair a database.
@@ -423,7 +423,7 @@ If the database is unrepairable, an error is returned.
 		
 			
 			
-			<h2 id="Cache">type <a href="/target/cache.go?s=537:584#L6">Cache</a></h2>
+			<h2 id="Cache">type <a href="/target/cache.go?s=536:583#L6">Cache</a></h2>
 			<pre>type Cache struct {
     Cache *C.leveldb_cache_t
 }</pre>
@@ -432,10 +432,10 @@ Cache is a cache used to store data read from data in memory.
 </p>
 <p>
 Typically, NewLRUCache() is all you will need, but advanced users may
-implement their own *C.leveldb_cache_t and create a *Cache
+implement their own *C.leveldb_cache_t and create a Cache.
 </p>
 <p>
-To prevent memory leaks, a *Cache must have Close() called on it when it is
+To prevent memory leaks, a Cache must have Close() called on it when it is
 no longer needed by the program. Note: if the process is shutting down,
 this may not be necessary and could be avoided to shorten shutdown time.
 </p>
@@ -449,13 +449,13 @@ this may not be necessary and could be avoided to shorten shutdown time.
 
 			
 				
-				<h3 id="NewLRUCache">func <a href="/target/cache.go?s=878:915#L15">NewLRUCache</a></h3>
+				<h3 id="NewLRUCache">func <a href="/target/cache.go?s=876:913#L15">NewLRUCache</a></h3>
 				<pre>func NewLRUCache(capacity int) *Cache</pre>
 				<p>
 NewLRUCache creates a new Cache object with the capacity given.
 </p>
 <p>
-To prevent memory leaks, Close() should be called on the *Cache when the
+To prevent memory leaks, Close() should be called on the Cache when the
 program no longer needs it. Note: if the process is shutting down, this may
 not be necessary and could be avoided to shorten shutdown time.
 </p>
@@ -465,10 +465,10 @@ not be necessary and could be avoided to shorten shutdown time.
 
 			
 				
-				<h3 id="Cache.Close">func (*Cache) <a href="/target/cache.go?s=1051:1074#L20">Close</a></h3>
+				<h3 id="Cache.Close">func (*Cache) <a href="/target/cache.go?s=1046:1069#L20">Close</a></h3>
 				<pre>func (c *Cache) Close()</pre>
 				<p>
-DestroyCache deallocates the underlying data of a Cache object.
+Close deallocates the underlying memory of the Cache object.
 </p>
 
 				
@@ -521,17 +521,17 @@ any DB method made after Close() will panic.
 
 			
 				
-				<h3 id="Open">func <a href="/target/db.go?s=1021:1070#L33">Open</a></h3>
+				<h3 id="Open">func <a href="/target/db.go?s=1019:1068#L33">Open</a></h3>
 				<pre>func Open(dbname string, o *Options) (*DB, error)</pre>
 				<p>
 Open opens a database.
 </p>
 <p>
 Creating a new database is done by calling SetCreateIfMissing(true) on the
-*Options passed to Open.
+Options passed to Open.
 </p>
 <p>
-It is usually wise to set a Cache object on the *Options with SetCache() to
+It is usually wise to set a Cache object on the Options with SetCache() to
 keep recently used data from that database in memory.
 </p>
 
@@ -540,7 +540,7 @@ keep recently used data from that database in memory.
 
 			
 				
-				<h3 id="DB.Close">func (*DB) <a href="/target/db.go?s=7398:7419#L243">Close</a></h3>
+				<h3 id="DB.Close">func (*DB) <a href="/target/db.go?s=7391:7412#L243">Close</a></h3>
 				<pre>func (db *DB) Close()</pre>
 				<p>
 Close closes the database, rendering it unusable for I/O, by deallocating
@@ -554,7 +554,7 @@ Any attempts to use the DB after Close is called will panic.
 				
 			
 				
-				<h3 id="DB.Delete">func (*DB) <a href="/target/db.go?s=3886:3942#L138">Delete</a></h3>
+				<h3 id="DB.Delete">func (*DB) <a href="/target/db.go?s=3884:3940#L138">Delete</a></h3>
 				<pre>func (db *DB) Delete(wo *WriteOptions, key []byte) error</pre>
 				<p>
 Delete removes the data associated with the key from the database.
@@ -568,7 +568,7 @@ them before returning.
 				
 			
 				
-				<h3 id="DB.Get">func (*DB) <a href="/target/db.go?s=3273:3335#L113">Get</a></h3>
+				<h3 id="DB.Get">func (*DB) <a href="/target/db.go?s=3271:3333#L113">Get</a></h3>
 				<pre>func (db *DB) Get(ro *ReadOptions, key []byte) ([]byte, error)</pre>
 				<p>
 Get returns the data associated with the key from the database.
@@ -587,7 +587,7 @@ them before returning.
 				
 			
 				
-				<h3 id="DB.GetApproximateSizes">func (*DB) <a href="/target/db.go?s=5292:5350#L184">GetApproximateSizes</a></h3>
+				<h3 id="DB.GetApproximateSizes">func (*DB) <a href="/target/db.go?s=5285:5343#L184">GetApproximateSizes</a></h3>
 				<pre>func (db *DB) GetApproximateSizes(ranges []Range) []uint64</pre>
 				<p>
 GetApproximateSizes returns the approximate number of bytes of file system
@@ -602,28 +602,28 @@ Range.Limit.
 				
 			
 				
-				<h3 id="DB.NewIterator">func (*DB) <a href="/target/db.go?s=4947:4999#L174">NewIterator</a></h3>
+				<h3 id="DB.NewIterator">func (*DB) <a href="/target/db.go?s=4940:4992#L174">NewIterator</a></h3>
 				<pre>func (db *DB) NewIterator(ro *ReadOptions) *Iterator</pre>
 				<p>
-NewIterator returns an *Iterator over the the database that uses the
+NewIterator returns an Iterator over the the database that uses the
 ReadOptions given.
 </p>
 <p>
 Often, this is used for large, offline bulk reads while serving live
 traffic. In that case, it may be wise to disable caching so that the data
-processed by the returned *Iterator does not displace the already cached
-data. This can be done by calling SetFillCache(false) on the *ReadOptions
+processed by the returned Iterator does not displace the already cached
+data. This can be done by calling SetFillCache(false) on the ReadOptions
 before passing it here.
 </p>
 <p>
-Similiarly, *ReadOptions.SetSnapshot() is also useful.
+Similiarly, ReadOptions.SetSnapshot() is also useful.
 </p>
 
 				
 				
 			
 				
-				<h3 id="DB.NewSnapshot">func (*DB) <a href="/target/db.go?s=6924:6973#L229">NewSnapshot</a></h3>
+				<h3 id="DB.NewSnapshot">func (*DB) <a href="/target/db.go?s=6917:6966#L229">NewSnapshot</a></h3>
 				<pre>func (db *DB) NewSnapshot() *C.leveldb_snapshot_t</pre>
 				<p>
 NewSnapshot creates a new snapshot of the database.
@@ -644,7 +644,7 @@ See the LevelDB C++ documentation docs for details.
 				
 			
 				
-				<h3 id="DB.PropertyValue">func (*DB) <a href="/target/db.go?s=6341:6392#L214">PropertyValue</a></h3>
+				<h3 id="DB.PropertyValue">func (*DB) <a href="/target/db.go?s=6334:6385#L214">PropertyValue</a></h3>
 				<pre>func (db *DB) PropertyValue(propName string) string</pre>
 				<p>
 PropertyValue returns the value of a database property.
@@ -658,7 +658,7 @@ and &#34;leveldb.num-files-at-level0&#34;.
 				
 			
 				
-				<h3 id="DB.Put">func (*DB) <a href="/target/db.go?s=2325:2385#L81">Put</a></h3>
+				<h3 id="DB.Put">func (*DB) <a href="/target/db.go?s=2323:2383#L81">Put</a></h3>
 				<pre>func (db *DB) Put(wo *WriteOptions, key, value []byte) error</pre>
 				<p>
 Put writes data associated with a key to the database.
@@ -676,7 +676,7 @@ them before returning.
 				
 			
 				
-				<h3 id="DB.ReleaseSnapshot">func (*DB) <a href="/target/db.go?s=7123:7180#L235">ReleaseSnapshot</a></h3>
+				<h3 id="DB.ReleaseSnapshot">func (*DB) <a href="/target/db.go?s=7116:7173#L235">ReleaseSnapshot</a></h3>
 				<pre>func (db *DB) ReleaseSnapshot(snap *C.leveldb_snapshot_t)</pre>
 				<p>
 ReleaseSnapshot removes the snapshot from the database&#39;s list of snapshots,
@@ -687,10 +687,10 @@ and deallocates it.
 				
 			
 				
-				<h3 id="DB.Write">func (*DB) <a href="/target/db.go?s=4246:4304#L155">Write</a></h3>
+				<h3 id="DB.Write">func (*DB) <a href="/target/db.go?s=4243:4301#L155">Write</a></h3>
 				<pre>func (db *DB) Write(wo *WriteOptions, w *WriteBatch) error</pre>
 				<p>
-Write atomically writes a *WriteBatch to disk.
+Write atomically writes a WriteBatch to disk.
 </p>
 
 				
@@ -722,7 +722,7 @@ Write atomically writes a *WriteBatch to disk.
 		
 			
 			
-			<h2 id="Env">type <a href="/target/env.go?s=389:430#L4">Env</a></h2>
+			<h2 id="Env">type <a href="/target/env.go?s=388:429#L4">Env</a></h2>
 			<pre>type Env struct {
     Env *C.leveldb_env_t
 }</pre>
@@ -734,7 +734,7 @@ Typically, NewDefaultEnv is all you need. Advanced users may create their
 own Env with a *C.leveldb_env_t of their own creation.
 </p>
 <p>
-To prevent memory leaks, an *Env must have Close() called on it when it is
+To prevent memory leaks, an Env must have Close() called on it when it is
 no longer needed by the program.
 </p>
 
@@ -747,7 +747,7 @@ no longer needed by the program.
 
 			
 				
-				<h3 id="NewDefaultEnv">func <a href="/target/env.go?s=587:612#L12">NewDefaultEnv</a></h3>
+				<h3 id="NewDefaultEnv">func <a href="/target/env.go?s=586:611#L12">NewDefaultEnv</a></h3>
 				<pre>func NewDefaultEnv() *Env</pre>
 				<p>
 NewDefaultEnv creates a default environment for use in an Options.
@@ -762,7 +762,7 @@ Close.
 
 			
 				
-				<h3 id="Env.Close">func (*Env) <a href="/target/env.go?s=724:747#L17">Close</a></h3>
+				<h3 id="Env.Close">func (*Env) <a href="/target/env.go?s=723:746#L17">Close</a></h3>
 				<pre>func (env *Env) Close()</pre>
 				<p>
 Close deallocates the Env, freeing the underlying struct.
@@ -774,7 +774,7 @@ Close deallocates the Env, freeing the underlying struct.
 		
 			
 			
-			<h2 id="Iterator">type <a href="/target/iterator.go?s=1223:1275#L33">Iterator</a></h2>
+			<h2 id="Iterator">type <a href="/target/iterator.go?s=1222:1274#L33">Iterator</a></h2>
 			<pre>type Iterator struct {
     Iter *C.leveldb_iterator_t
 }</pre>
@@ -807,7 +807,7 @@ for it = it; it.Valid(); it.Next() {
 }
 </pre>
 <p>
-To prevent memory leaks, an *Iterator must have Close() called on it when
+To prevent memory leaks, an Iterator must have Close() called on it when
 it is no longer needed by the program.
 </p>
 
@@ -822,7 +822,7 @@ it is no longer needed by the program.
 
 			
 				
-				<h3 id="Iterator.Close">func (*Iterator) <a href="/target/iterator.go?s=3978:4005#L117">Close</a></h3>
+				<h3 id="Iterator.Close">func (*Iterator) <a href="/target/iterator.go?s=3977:4004#L117">Close</a></h3>
 				<pre>func (it *Iterator) Close()</pre>
 				<p>
 Close deallocates the given Iterator, freeing the underlying C struct.
@@ -832,7 +832,7 @@ Close deallocates the given Iterator, freeing the underlying C struct.
 				
 			
 				
-				<h3 id="Iterator.GetError">func (*Iterator) <a href="/target/iterator.go?s=3720:3756#L107">GetError</a></h3>
+				<h3 id="Iterator.GetError">func (*Iterator) <a href="/target/iterator.go?s=3719:3755#L107">GetError</a></h3>
 				<pre>func (it *Iterator) GetError() error</pre>
 				<p>
 GetError() returns an error from LevelDB found while iterating.
@@ -845,7 +845,7 @@ This method is safe to call when Valid() returns false.
 				
 			
 				
-				<h3 id="Iterator.Key">func (*Iterator) <a href="/target/iterator.go?s=1618:1650#L46">Key</a></h3>
+				<h3 id="Iterator.Key">func (*Iterator) <a href="/target/iterator.go?s=1617:1649#L46">Key</a></h3>
 				<pre>func (it *Iterator) Key() []byte</pre>
 				<p>
 Key() returns a copy the key in the database the iterator currently holds.
@@ -858,7 +858,7 @@ If Valid() returns false, this method will panic.
 				
 			
 				
-				<h3 id="Iterator.Next">func (*Iterator) <a href="/target/iterator.go?s=2259:2285#L66">Next</a></h3>
+				<h3 id="Iterator.Next">func (*Iterator) <a href="/target/iterator.go?s=2258:2284#L66">Next</a></h3>
 				<pre>func (it *Iterator) Next()</pre>
 				<p>
 Next() moves the iterator to the next sequential key in the database, as
@@ -872,7 +872,7 @@ If Valid() returns false, this method will panic.
 				
 			
 				
-				<h3 id="Iterator.Prev">func (*Iterator) <a href="/target/iterator.go?s=2538:2564#L75">Prev</a></h3>
+				<h3 id="Iterator.Prev">func (*Iterator) <a href="/target/iterator.go?s=2537:2563#L75">Prev</a></h3>
 				<pre>func (it *Iterator) Prev()</pre>
 				<p>
 Prev() moves the iterator to the previous sequential key in the database,
@@ -887,7 +887,7 @@ If Valid() returns false, this method will panic.
 				
 			
 				
-				<h3 id="Iterator.Seek">func (*Iterator) <a href="/target/iterator.go?s=3463:3499#L100">Seek</a></h3>
+				<h3 id="Iterator.Seek">func (*Iterator) <a href="/target/iterator.go?s=3462:3498#L100">Seek</a></h3>
 				<pre>func (it *Iterator) Seek(key []byte)</pre>
 				<p>
 Seek() moves the iterator the position of the key given or, if the key
@@ -902,7 +902,7 @@ This method is safe to call when Valid() returns false.
 				
 			
 				
-				<h3 id="Iterator.SeekToFirst">func (*Iterator) <a href="/target/iterator.go?s=2813:2846#L83">SeekToFirst</a></h3>
+				<h3 id="Iterator.SeekToFirst">func (*Iterator) <a href="/target/iterator.go?s=2812:2845#L83">SeekToFirst</a></h3>
 				<pre>func (it *Iterator) SeekToFirst()</pre>
 				<p>
 SeekToFirst() moves the iterator to the first key in the database, as
@@ -916,7 +916,7 @@ This method is safe to call when Valid() returns false.
 				
 			
 				
-				<h3 id="Iterator.SeekToLast">func (*Iterator) <a href="/target/iterator.go?s=3102:3134#L91">SeekToLast</a></h3>
+				<h3 id="Iterator.SeekToLast">func (*Iterator) <a href="/target/iterator.go?s=3101:3133#L91">SeekToLast</a></h3>
 				<pre>func (it *Iterator) SeekToLast()</pre>
 				<p>
 SeekToLast() moves the iterator to the last key in the database, as
@@ -930,7 +930,7 @@ This method is safe to call when Valid() returns false.
 				
 			
 				
-				<h3 id="Iterator.Valid">func (*Iterator) <a href="/target/iterator.go?s=1395:1427#L39">Valid</a></h3>
+				<h3 id="Iterator.Valid">func (*Iterator) <a href="/target/iterator.go?s=1394:1426#L39">Valid</a></h3>
 				<pre>func (it *Iterator) Valid() bool</pre>
 				<p>
 Valid() returns false only when an Iterator has iterated past either the
@@ -941,7 +941,7 @@ first or the last key in the database.
 				
 			
 				
-				<h3 id="Iterator.Value">func (*Iterator) <a href="/target/iterator.go?s=1918:1952#L56">Value</a></h3>
+				<h3 id="Iterator.Value">func (*Iterator) <a href="/target/iterator.go?s=1917:1951#L56">Value</a></h3>
 				<pre>func (it *Iterator) Value() []byte</pre>
 				<p>
 Value() returns a copy of the value in the database the iterator currently
@@ -1006,13 +1006,13 @@ the program no longer needs it.
 
 			
 				
-				<h3 id="NewOptions">func <a href="/target/options.go?s=1449:1475#L41">NewOptions</a></h3>
+				<h3 id="NewOptions">func <a href="/target/options.go?s=1448:1474#L41">NewOptions</a></h3>
 				<pre>func NewOptions() *Options</pre>
 				<p>
 NewOptions allocates a new Options object.
 </p>
 <p>
-To prevent memory leaks, the *Options returned must have DestroyOptions()
+To prevent memory leaks, the Options returned must have DestroyOptions()
 called on it when it is no longer needed by the program.
 </p>
 
@@ -1021,7 +1021,7 @@ called on it when it is no longer needed by the program.
 
 			
 				
-				<h3 id="Options.Close">func (*Options) <a href="/target/options.go?s=2200:2225#L65">Close</a></h3>
+				<h3 id="Options.Close">func (*Options) <a href="/target/options.go?s=2197:2222#L65">Close</a></h3>
 				<pre>func (o *Options) Close()</pre>
 				<p>
 Close deallocates the Options, freeing its underlying C struct.
@@ -1031,7 +1031,7 @@ Close deallocates the Options, freeing its underlying C struct.
 				
 			
 				
-				<h3 id="Options.SetBlockRestartInterval">func (*Options) <a href="/target/options.go?s=4755:4803#L141">SetBlockRestartInterval</a></h3>
+				<h3 id="Options.SetBlockRestartInterval">func (*Options) <a href="/target/options.go?s=4752:4800#L141">SetBlockRestartInterval</a></h3>
 				<pre>func (o *Options) SetBlockRestartInterval(n int)</pre>
 				<p>
 SetBlockRestartInterval is the number of keys between restarts points for
@@ -1045,7 +1045,7 @@ Most clients should leave this parameter alone.
 				
 			
 				
-				<h3 id="Options.SetBlockSize">func (*Options) <a href="/target/options.go?s=4503:4540#L133">SetBlockSize</a></h3>
+				<h3 id="Options.SetBlockSize">func (*Options) <a href="/target/options.go?s=4500:4537#L133">SetBlockSize</a></h3>
 				<pre>func (o *Options) SetBlockSize(s int)</pre>
 				<p>
 SetBlockSize sets the approximate size of user data packed per block.
@@ -1058,7 +1058,7 @@ See the LevelDB C++ documentation for details.
 				
 			
 				
-				<h3 id="Options.SetCache">func (*Options) <a href="/target/options.go?s=3074:3114#L91">SetCache</a></h3>
+				<h3 id="Options.SetCache">func (*Options) <a href="/target/options.go?s=3071:3111#L91">SetCache</a></h3>
 				<pre>func (o *Options) SetCache(cache *Cache)</pre>
 				<p>
 SetCache places a cache object in the database when a database is opened.
@@ -1071,7 +1071,7 @@ This is usually wise to use.
 				
 			
 				
-				<h3 id="Options.SetComparator">func (*Options) <a href="/target/options.go?s=2584:2644#L77">SetComparator</a></h3>
+				<h3 id="Options.SetComparator">func (*Options) <a href="/target/options.go?s=2581:2641#L77">SetComparator</a></h3>
 				<pre>func (o *Options) SetComparator(cmp *C.leveldb_comparator_t)</pre>
 				<p>
 SetComparator sets the comparator to be used for all read and write
@@ -1090,7 +1090,7 @@ The default *C.leveldb_comparator_t is usually sufficient.
 				
 			
 				
-				<h3 id="Options.SetCompression">func (*Options) <a href="/target/options.go?s=5247:5297#L154">SetCompression</a></h3>
+				<h3 id="Options.SetCompression">func (*Options) <a href="/target/options.go?s=5244:5294#L154">SetCompression</a></h3>
 				<pre>func (o *Options) SetCompression(t CompressionOpt)</pre>
 				<p>
 SetCompression sets whether to compress blocks using the specified
@@ -1110,7 +1110,7 @@ SnappyCompression setting will be ignored.
 				
 			
 				
-				<h3 id="Options.SetCreateIfMissing">func (*Options) <a href="/target/options.go?s=5455:5499#L160">SetCreateIfMissing</a></h3>
+				<h3 id="Options.SetCreateIfMissing">func (*Options) <a href="/target/options.go?s=5452:5496#L160">SetCreateIfMissing</a></h3>
 				<pre>func (o *Options) SetCreateIfMissing(b bool)</pre>
 				<p>
 SetCreateIfMissing causes Open to create a new database on disk if it does
@@ -1121,7 +1121,7 @@ not already exist.
 				
 			
 				
-				<h3 id="Options.SetEnv">func (*Options) <a href="/target/options.go?s=3228:3262#L96">SetEnv</a></h3>
+				<h3 id="Options.SetEnv">func (*Options) <a href="/target/options.go?s=3225:3259#L96">SetEnv</a></h3>
 				<pre>func (o *Options) SetEnv(env *Env)</pre>
 				<p>
 SetEnv sets the Env object for the new database handle.
@@ -1131,7 +1131,7 @@ SetEnv sets the Env object for the new database handle.
 				
 			
 				
-				<h3 id="Options.SetErrorIfExists">func (*Options) <a href="/target/options.go?s=2812:2868#L83">SetErrorIfExists</a></h3>
+				<h3 id="Options.SetErrorIfExists">func (*Options) <a href="/target/options.go?s=2809:2865#L83">SetErrorIfExists</a></h3>
 				<pre>func (o *Options) SetErrorIfExists(error_if_exists bool)</pre>
 				<p>
 SetErrorIfExists, if passed true, will cause the opening of a database that
@@ -1142,7 +1142,7 @@ already exists to throw an error.
 				
 			
 				
-				<h3 id="Options.SetInfoLog">func (*Options) <a href="/target/options.go?s=3408:3461#L102">SetInfoLog</a></h3>
+				<h3 id="Options.SetInfoLog">func (*Options) <a href="/target/options.go?s=3405:3458#L102">SetInfoLog</a></h3>
 				<pre>func (o *Options) SetInfoLog(log *C.leveldb_logger_t)</pre>
 				<p>
 SetInfoLog sets a *C.leveldb_logger_t object as the informational logger
@@ -1153,7 +1153,7 @@ for the database.
 				
 			
 				
-				<h3 id="Options.SetMaxOpenFiles">func (*Options) <a href="/target/options.go?s=4276:4316#L126">SetMaxOpenFiles</a></h3>
+				<h3 id="Options.SetMaxOpenFiles">func (*Options) <a href="/target/options.go?s=4273:4313#L126">SetMaxOpenFiles</a></h3>
 				<pre>func (o *Options) SetMaxOpenFiles(n int)</pre>
 				<p>
 SetMaxOpenFiles sets the number of files than can be used at once by the
@@ -1167,7 +1167,7 @@ See the LevelDB C++ documentation for details.
 				
 			
 				
-				<h3 id="Options.SetParanoidChecks">func (*Options) <a href="/target/options.go?s=4021:4065#L118">SetParanoidChecks</a></h3>
+				<h3 id="Options.SetParanoidChecks">func (*Options) <a href="/target/options.go?s=4018:4062#L118">SetParanoidChecks</a></h3>
 				<pre>func (o *Options) SetParanoidChecks(pc bool)</pre>
 				<p>
 SetParanoidChecks, when called with true, will cause the database to do
@@ -1182,7 +1182,7 @@ See the LevelDB C++ documentation docs for details.
 				
 			
 				
-				<h3 id="Options.SetWriteBufferSize">func (*Options) <a href="/target/options.go?s=3681:3724#L109">SetWriteBufferSize</a></h3>
+				<h3 id="Options.SetWriteBufferSize">func (*Options) <a href="/target/options.go?s=3678:3721#L109">SetWriteBufferSize</a></h3>
 				<pre>func (o *Options) SetWriteBufferSize(s int)</pre>
 				<p>
 SetWriteBufferSize sets the number of bytes the database will build up in
@@ -1241,13 +1241,13 @@ when the program no longer needs it
 
 			
 				
-				<h3 id="NewReadOptions">func <a href="/target/options.go?s=1727:1761#L50">NewReadOptions</a></h3>
+				<h3 id="NewReadOptions">func <a href="/target/options.go?s=1725:1759#L50">NewReadOptions</a></h3>
 				<pre>func NewReadOptions() *ReadOptions</pre>
 				<p>
 NewReadOptions allocates a new ReadOptions object.
 </p>
 <p>
-To prevent memory leaks, the *ReadOptions returned must have Close() called
+To prevent memory leaks, the ReadOptions returned must have Close() called
 on it when it is no longer needed by the program.
 </p>
 
@@ -1256,7 +1256,7 @@ on it when it is no longer needed by the program.
 
 			
 				
-				<h3 id="ReadOptions.Close">func (*ReadOptions) <a href="/target/options.go?s=5640:5670#L165">Close</a></h3>
+				<h3 id="ReadOptions.Close">func (*ReadOptions) <a href="/target/options.go?s=5637:5667#L165">Close</a></h3>
 				<pre>func (ro *ReadOptions) Close()</pre>
 				<p>
 Close deallocates the ReadOptions, freeing its underlying C struct.
@@ -1266,7 +1266,7 @@ Close deallocates the ReadOptions, freeing its underlying C struct.
 				
 			
 				
-				<h3 id="ReadOptions.SetFillCache">func (*ReadOptions) <a href="/target/options.go?s=6351:6394#L183">SetFillCache</a></h3>
+				<h3 id="ReadOptions.SetFillCache">func (*ReadOptions) <a href="/target/options.go?s=6347:6390#L183">SetFillCache</a></h3>
 				<pre>func (ro *ReadOptions) SetFillCache(b bool)</pre>
 				<p>
 SetFillCache, when called with true, will cause all data read from
@@ -1274,7 +1274,7 @@ underlying storage to be placed in the database cache, if the cache exists.
 </p>
 <p>
 It is useful to turn this off on ReadOptions that are used for
-*DB.Iterator(), as it will prevent bulk scans from flushing out live user
+DB.Iterator(), as it will prevent bulk scans from flushing out live user
 data in the cache.
 </p>
 
@@ -1282,11 +1282,11 @@ data in the cache.
 				
 			
 				
-				<h3 id="ReadOptions.SetSnapshot">func (*ReadOptions) <a href="/target/options.go?s=6633:6695#L191">SetSnapshot</a></h3>
+				<h3 id="ReadOptions.SetSnapshot">func (*ReadOptions) <a href="/target/options.go?s=6628:6690#L191">SetSnapshot</a></h3>
 				<pre>func (ro *ReadOptions) SetSnapshot(snap *C.leveldb_snapshot_t)</pre>
 				<p>
 SetSnapshot causes reads to provided as they were when the passed in
-Snapshot was created by *DB.NewSnapshot().
+Snapshot was created by DB.NewSnapshot().
 </p>
 <p>
 See the LevelDB C++ documentation for details.
@@ -1296,7 +1296,7 @@ See the LevelDB C++ documentation for details.
 				
 			
 				
-				<h3 id="ReadOptions.SetVerifyChecksums">func (*ReadOptions) <a href="/target/options.go?s=5911:5960#L173">SetVerifyChecksums</a></h3>
+				<h3 id="ReadOptions.SetVerifyChecksums">func (*ReadOptions) <a href="/target/options.go?s=5908:5957#L173">SetVerifyChecksums</a></h3>
 				<pre>func (ro *ReadOptions) SetVerifyChecksums(b bool)</pre>
 				<p>
 SetVerifyChecksums, when called with true, will cause all data read from
@@ -1312,13 +1312,13 @@ See the LevelDB C++ documentation for details.
 		
 			
 			
-			<h2 id="WriteBatch">type <a href="/target/batch.go?s=347:405#L6">WriteBatch</a></h2>
+			<h2 id="WriteBatch">type <a href="/target/batch.go?s=346:404#L6">WriteBatch</a></h2>
 			<pre>type WriteBatch struct {
     <span class="comment">// contains filtered or unexported fields</span>
 }</pre>
 			<p>
 WriteBatch is a batching of Puts, and Deletes to be written atomically to a
-database. A WriteBatch is written when passed to *DB.Write().
+database. A WriteBatch is written when passed to DB.Write().
 </p>
 <p>
 To prevent memory leaks, call Close() when the program no longer needs the
@@ -1334,10 +1334,10 @@ WriteBatch object.
 
 			
 				
-				<h3 id="NewWriteBatch">func <a href="/target/batch.go?s=463:495#L11">NewWriteBatch</a></h3>
+				<h3 id="NewWriteBatch">func <a href="/target/batch.go?s=461:493#L11">NewWriteBatch</a></h3>
 				<pre>func NewWriteBatch() *WriteBatch</pre>
 				<p>
-NewWriteBatch creates a fully allocated *WriteBatch.
+NewWriteBatch creates a fully allocated WriteBatch.
 </p>
 
 				
@@ -1345,27 +1345,27 @@ NewWriteBatch creates a fully allocated *WriteBatch.
 
 			
 				
-				<h3 id="WriteBatch.Clear">func (*WriteBatch) <a href="/target/batch.go?s=1629:1657#L45">Clear</a></h3>
+				<h3 id="WriteBatch.Clear">func (*WriteBatch) <a href="/target/batch.go?s=1625:1653#L45">Clear</a></h3>
 				<pre>func (w *WriteBatch) Clear()</pre>
 				<p>
-Clear removes all the enqueued Put and Deletes in the *WriteBatch.
+Clear removes all the enqueued Put and Deletes in the WriteBatch.
 </p>
 
 				
 				
 			
 				
-				<h3 id="WriteBatch.Close">func (*WriteBatch) <a href="/target/batch.go?s=620:648#L17">Close</a></h3>
+				<h3 id="WriteBatch.Close">func (*WriteBatch) <a href="/target/batch.go?s=617:645#L17">Close</a></h3>
 				<pre>func (w *WriteBatch) Close()</pre>
 				<p>
-Close releases the underlying memory of a *WriteBatch.
+Close releases the underlying memory of a WriteBatch.
 </p>
 
 				
 				
 			
 				
-				<h3 id="WriteBatch.Delete">func (*WriteBatch) <a href="/target/batch.go?s=1417:1456#L39">Delete</a></h3>
+				<h3 id="WriteBatch.Delete">func (*WriteBatch) <a href="/target/batch.go?s=1414:1453#L39">Delete</a></h3>
 				<pre>func (w *WriteBatch) Delete(key []byte)</pre>
 				<p>
 Delete queues a deletion of the data at key to be deleted later.
@@ -1379,7 +1379,7 @@ them before returning.
 				
 			
 				
-				<h3 id="WriteBatch.Put">func (*WriteBatch) <a href="/target/batch.go?s=878:921#L26">Put</a></h3>
+				<h3 id="WriteBatch.Put">func (*WriteBatch) <a href="/target/batch.go?s=875:918#L26">Put</a></h3>
 				<pre>func (w *WriteBatch) Put(key, value []byte)</pre>
 				<p>
 Put places a key-value pair into the WriteBatch for writing later.
@@ -1417,13 +1417,13 @@ WriteOptions when the program no longer needs it
 
 			
 				
-				<h3 id="NewWriteOptions">func <a href="/target/options.go?s=2024:2060#L59">NewWriteOptions</a></h3>
+				<h3 id="NewWriteOptions">func <a href="/target/options.go?s=2021:2057#L59">NewWriteOptions</a></h3>
 				<pre>func NewWriteOptions() *WriteOptions</pre>
 				<p>
 NewWriteOptions allocates a new WriteOptions object.
 </p>
 <p>
-To prevent memory leaks, the *WriteOptions returned must have Close()
+To prevent memory leaks, the WriteOptions returned must have Close()
 called on it when it is no longer needed by the program.
 </p>
 
@@ -1432,7 +1432,7 @@ called on it when it is no longer needed by the program.
 
 			
 				
-				<h3 id="WriteOptions.Close">func (*WriteOptions) <a href="/target/options.go?s=6823:6854#L196">Close</a></h3>
+				<h3 id="WriteOptions.Close">func (*WriteOptions) <a href="/target/options.go?s=6818:6849#L196">Close</a></h3>
 				<pre>func (wo *WriteOptions) Close()</pre>
 				<p>
 Close deallocates the WriteOptions, freeing its underlying C struct.
@@ -1442,7 +1442,7 @@ Close deallocates the WriteOptions, freeing its underlying C struct.
 				
 			
 				
-				<h3 id="WriteOptions.SetSync">func (*WriteOptions) <a href="/target/options.go?s=7409:7448#L209">SetSync</a></h3>
+				<h3 id="WriteOptions.SetSync">func (*WriteOptions) <a href="/target/options.go?s=7404:7443#L209">SetSync</a></h3>
 				<pre>func (wo *WriteOptions) SetSync(b bool)</pre>
 				<p>
 See the LevelDB C++ documentation for details.
