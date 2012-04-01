@@ -97,7 +97,7 @@ func (o *Options) SetErrorIfExists(error_if_exists bool) {
 
 // SetCache places a cache object in the database when a database is opened.
 //
-// This is usually wise to use.
+// This is usually wise to use. See also ReadOptions.SetFillCache.
 func (o *Options) SetCache(cache *Cache) {
 	C.leveldb_options_set_cache(o.Opt, cache.Cache)
 }
@@ -155,9 +155,8 @@ func (o *Options) SetBlockRestartInterval(n int) {
 // SetCompression sets whether to compress blocks using the specified
 // compresssion algorithm.
 //
-// The default value is SnappyCompression and it is fast
-// enough that it is unlikely you want to turn it off. The other option is
-// NoCompression.
+// The default value is SnappyCompression and it is fast enough that it is
+// unlikely you want to turn it off. The other option is NoCompression.
 //
 // If the LevelDB library was built without Snappy compression enabled, the
 // SnappyCompression setting will be ignored.
@@ -176,26 +175,29 @@ func (ro *ReadOptions) Close() {
 	C.leveldb_readoptions_destroy(ro.Opt)
 }
 
-// SetVerifyChecksums, when called with true, will cause all data read from
-// underlying storage to verified against corresponding checksums.
+// SetVerifyChecksums controls whether all data read with this ReadOptions
+// will be verified against corresponding checksums.
 //
-// See the LevelDB C++ documentation for details.
+// It defaults to false. See the LevelDB C++ documentation for details.
 func (ro *ReadOptions) SetVerifyChecksums(b bool) {
 	C.leveldb_readoptions_set_verify_checksums(ro.Opt, boolToUchar(b))
 }
 
-// SetFillCache, when called with true, will cause all data read from
-// underlying storage to be placed in the database cache, if the cache exists.
+// SetFillCache controls whether reads performed with this ReadOptions will
+// fill the Cache of the server. It defaults to true.
 //
-// It is useful to turn this off on ReadOptions that are used for
-// DB.Iterator, as it will prevent bulk scans from flushing out live user
-// data in the cache.
+// It is useful to turn this off on ReadOptions for DB.Iterator (and DB.Get)
+// calls used in offline threads to prevent bulk scans from flushing out live
+// user data in the cache.
+//
+// See also Options.SetCache
 func (ro *ReadOptions) SetFillCache(b bool) {
 	C.leveldb_readoptions_set_fill_cache(ro.Opt, boolToUchar(b))
 }
 
 // SetSnapshot causes reads to provided as they were when the passed in
-// Snapshot was created by DB.NewSnapshot.
+// Snapshot was created by DB.NewSnapshot. This is useful for getting
+// consistent reads during a bulk operation.
 //
 // See the LevelDB C++ documentation for details.
 func (ro *ReadOptions) SetSnapshot(snap *C.leveldb_snapshot_t) {
@@ -207,14 +209,14 @@ func (wo *WriteOptions) Close() {
 	C.leveldb_writeoptions_destroy(wo.Opt)
 }
 
-// SetSync, when called with true, will cause each write to be flushed from
-// the operating system buffer cache before the write is considered complete.
+// SetSync controls whether each write performed with this WriteOptions will
+// be flushed from the operating system buffer cache before the write is
+// considered complete.
 //
-// If called with true, this will signficanly slow down writes. If called with
-// false, and the machine crashes, some recent writes may be lost. Note that
-// if it is just the process that crashes (i.e., the machine does not reboot),
-// no writes will be lost even when SetSync is called with false.
-
+// If called with true, this will signficantly slow down writes. If called
+// with false, and the host machine crashes, some recent writes may be
+// lost. The default is false.
+//
 // See the LevelDB C++ documentation for details.
 func (wo *WriteOptions) SetSync(b bool) {
 	C.leveldb_writeoptions_set_sync(wo.Opt, boolToUchar(b))
