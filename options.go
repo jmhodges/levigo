@@ -19,9 +19,8 @@ const (
 // It is usually with to call SetCache with a cache object. Otherwise, all
 // data will be read off disk.
 //
-// To prevent memory leaks, DestroyOptions must be called on an Options when
-// the program no longer needs it.
-//
+// To prevent memory leaks, Close must be called on an Options when the
+// program no longer needs it.
 type Options struct {
 	Opt *C.leveldb_options_t
 }
@@ -29,8 +28,8 @@ type Options struct {
 // ReadOptions represent all of the available options when reading from a
 // database.
 //
-// To prevent memory leaks, DestroyReadOptions must called on a ReadOptions
-// when the program no longer needs it
+// To prevent memory leaks, Close must called on a ReadOptions when the
+// program no longer needs it.
 type ReadOptions struct {
 	Opt *C.leveldb_readoptions_t
 }
@@ -38,34 +37,25 @@ type ReadOptions struct {
 // WriteOptions represent all of the available options when writeing from a
 // database.
 //
-// To prevent memory leaks, DestroyWriteOptions must called on a
-// WriteOptions when the program no longer needs it
+// To prevent memory leaks, Close must called on a WriteOptions when the
+// program no longer needs it.
 type WriteOptions struct {
 	Opt *C.leveldb_writeoptions_t
 }
 
 // NewOptions allocates a new Options object.
-//
-// To prevent memory leaks, the Options returned must have DestroyOptions
-// called on it when it is no longer needed by the program.
 func NewOptions() *Options {
 	opt := C.leveldb_options_create()
 	return &Options{opt}
 }
 
 // NewReadOptions allocates a new ReadOptions object.
-//
-// To prevent memory leaks, the ReadOptions returned must have Close called
-// on it when it is no longer needed by the program.
 func NewReadOptions() *ReadOptions {
 	opt := C.leveldb_readoptions_create()
 	return &ReadOptions{opt}
 }
 
 // NewWriteOptions allocates a new WriteOptions object.
-//
-// To prevent memory leaks, the WriteOptions returned must have Close
-// called on it when it is no longer needed by the program.
 func NewWriteOptions() *WriteOptions {
 	opt := C.leveldb_writeoptions_create()
 	return &WriteOptions{opt}
