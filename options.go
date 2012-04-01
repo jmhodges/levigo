@@ -73,7 +73,7 @@ func (o *Options) Close() {
 // one with the same name string) that is used to perform read and write
 // operations.
 //
-// The default *C.leveldb_comparator_t is usually sufficient.
+// The default comparator is usually sufficient.
 func (o *Options) SetComparator(cmp *C.leveldb_comparator_t) {
 	C.leveldb_options_set_comparator(o.Opt, cmp)
 }
