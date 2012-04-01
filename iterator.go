@@ -37,6 +37,9 @@ func (e IteratorError) Error() string {
 // 	for it = it; it.Valid(); it.Next() {
 // 		useKeyAndValue(it.Key(), it.Value())
 // 	}
+//  if err := it.GetError() {
+//  	...
+//  }
 //
 // To prevent memory leaks, an Iterator must have Close called on it when it
 // is no longer needed by the program.

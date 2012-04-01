@@ -35,6 +35,9 @@ use when creating the Iterator.
 	for it = it; it.Valid(); it.Next() {
 		munge(it.Key(), it.Value())
 	}
+	if err := it.GetError() {
+		...
+	}
 
 Batched, atomic writes can be performed with a WriteBatch and
 DB.Write.
