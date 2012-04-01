@@ -9,7 +9,8 @@ import (
 
 // This testcase is a port of leveldb's c_test.c 
 func TestC(t *testing.T) {
-	dbname := fmt.Sprintf("/tmp/leveldb_c_test-%d", os.Geteuid())
+	dbname := os.TempDir()
+	defer os.Remove(dbname)
 	// TODO: This seems impossible to do with pure Go comparators, but testing
 	// that a nice API to setting the C stuff would be good.
 	// cmp := NewComparator(gcmp)
@@ -183,7 +184,8 @@ func TestC(t *testing.T) {
 }
 
 func TestNilSlicesInDb(t *testing.T) {
-	dbname := fmt.Sprintf("/tmp/leveldb_get_test-%d", os.Geteuid())
+	dbname := os.TempDir()
+	defer os.Remove(dbname)
 	options := NewOptions()
 	options.SetErrorIfExists(true)
 	options.SetCreateIfMissing(true)
@@ -237,7 +239,8 @@ func TestNilSlicesInDb(t *testing.T) {
 }
 
 func TestIterationValidityLimits(t *testing.T) {
-	dbname := fmt.Sprintf("/tmp/leveldb_iteration_test-%d", os.Geteuid())
+	dbname := os.TempDir()
+	defer os.Remove(dbname)
 	options := NewOptions()
 	options.SetErrorIfExists(true)
 	options.SetCreateIfMissing(true)
