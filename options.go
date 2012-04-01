@@ -129,7 +129,8 @@ func (o *Options) SetMaxOpenFiles(n int) {
 
 // SetBlockSize sets the approximate size of user data packed per block.
 //
-// See the LevelDB C++ documentation for details.
+// The default is roughly 4096 uncompressed bytes. A better setting depends on
+// your use case. See the LevelDB C++ documentation for details.
 func (o *Options) SetBlockSize(s int) {
 	C.leveldb_options_set_block_size(o.Opt, C.size_t(s))
 }
@@ -137,7 +138,8 @@ func (o *Options) SetBlockSize(s int) {
 // SetBlockRestartInterval is the number of keys between restarts points for
 // delta encoding keys.
 //
-// Most clients should leave this parameter alone.
+// Most clients should leave this parameter alone. See the LevelDB C++
+// documentation for details.
 func (o *Options) SetBlockRestartInterval(n int) {
 	C.leveldb_options_set_block_restart_interval(o.Opt, C.int(n))
 }
