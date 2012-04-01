@@ -17,11 +17,13 @@ func (e DatabaseError) Error() string {
 
 // DB is a reusable handle to a LevelDB database on disk, created by Open.
 //
-// To avoid memory and file descriptor leaks, call Close when you are
-// through with the handle.
+// To avoid memory and file descriptor leaks, call Close when the process no
+// longer needs the handle. Calls to any DB method made after Close will
+// panic.
 //
-// All methods on a DB instance are thread-safe except for Close. Calls to
-// any DB method made after Close will panic.
+// The DB instance may be shared between goroutines. The usual data race
+// conditions will occur if the same key is written to from more than one, of
+// course.
 type DB struct {
 	Ldb *C.leveldb_t
 }
