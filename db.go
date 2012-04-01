@@ -235,7 +235,7 @@ func (db *DB) PropertyValue(propName string) string {
 // To prevent memory leaks and resource strain in the database, the snapshot
 // returned must be released with this DB's ReleaseSnapshot method.
 //
-// See the LevelDB C++ documentation docs for details.
+// See the LevelDB documentation for details.
 func (db *DB) NewSnapshot() *C.leveldb_snapshot_t {
 	return C.leveldb_create_snapshot(db.Ldb)
 }

@@ -114,7 +114,7 @@ func (o *Options) SetWriteBufferSize(s int) {
 // aggressive checking of the data it is processing and will stop early if it
 // detects errors.
 //
-// See the LevelDB C++ documentation docs for details.
+// See the LevelDB documentation docs for details.
 func (o *Options) SetParanoidChecks(pc bool) {
 	C.leveldb_options_set_paranoid_checks(o.Opt, boolToUchar(pc))
 }
@@ -122,7 +122,7 @@ func (o *Options) SetParanoidChecks(pc bool) {
 // SetMaxOpenFiles sets the number of files than can be used at once by the
 // database.
 //
-// See the LevelDB C++ documentation for details.
+// See the LevelDB documentation for details.
 func (o *Options) SetMaxOpenFiles(n int) {
 	C.leveldb_options_set_max_open_files(o.Opt, C.int(n))
 }
@@ -130,7 +130,7 @@ func (o *Options) SetMaxOpenFiles(n int) {
 // SetBlockSize sets the approximate size of user data packed per block.
 //
 // The default is roughly 4096 uncompressed bytes. A better setting depends on
-// your use case. See the LevelDB C++ documentation for details.
+// your use case. See the LevelDB documentation for details.
 func (o *Options) SetBlockSize(s int) {
 	C.leveldb_options_set_block_size(o.Opt, C.size_t(s))
 }
@@ -138,7 +138,7 @@ func (o *Options) SetBlockSize(s int) {
 // SetBlockRestartInterval is the number of keys between restarts points for
 // delta encoding keys.
 //
-// Most clients should leave this parameter alone. See the LevelDB C++
+// Most clients should leave this parameter alone. See the LevelDB
 // documentation for details.
 func (o *Options) SetBlockRestartInterval(n int) {
 	C.leveldb_options_set_block_restart_interval(o.Opt, C.int(n))
@@ -170,7 +170,7 @@ func (ro *ReadOptions) Close() {
 // SetVerifyChecksums controls whether all data read with this ReadOptions
 // will be verified against corresponding checksums.
 //
-// It defaults to false. See the LevelDB C++ documentation for details.
+// It defaults to false. See the LevelDB documentation for details.
 func (ro *ReadOptions) SetVerifyChecksums(b bool) {
 	C.leveldb_readoptions_set_verify_checksums(ro.Opt, boolToUchar(b))
 }
@@ -191,7 +191,7 @@ func (ro *ReadOptions) SetFillCache(b bool) {
 // Snapshot was created by DB.NewSnapshot. This is useful for getting
 // consistent reads during a bulk operation.
 //
-// See the LevelDB C++ documentation for details.
+// See the LevelDB documentation for details.
 func (ro *ReadOptions) SetSnapshot(snap *C.leveldb_snapshot_t) {
 	C.leveldb_readoptions_set_snapshot(ro.Opt, snap)
 }
@@ -209,7 +209,7 @@ func (wo *WriteOptions) Close() {
 // with false, and the host machine crashes, some recent writes may be
 // lost. The default is false.
 //
-// See the LevelDB C++ documentation for details.
+// See the LevelDB documentation for details.
 func (wo *WriteOptions) SetSync(b bool) {
 	C.leveldb_writeoptions_set_sync(wo.Opt, boolToUchar(b))
 }
