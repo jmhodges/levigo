@@ -7,18 +7,12 @@ import (
 	"testing"
 )
 
-// This testcase is a port of leveldb's c_test.c 
+// This testcase is a port of leveldb's c_test.c.
 func TestC(t *testing.T) {
 	dbname := os.TempDir()
 	defer os.Remove(dbname)
-	// TODO: This seems impossible to do with pure Go comparators, but testing
-	// that a nice API to setting the C stuff would be good.
-	// cmp := NewComparator(gcmp)
-	// if cmp == nil {
-	// t.Errorf("NewComparator gave back something not a Comparator")
-	// }
 	env := NewDefaultEnv()
-	cache := NewLRUCache(100000)
+	cache := NewLRUCache(1<<20)
 
 	options := NewOptions()
 	// options.SetComparator(cmp)
@@ -26,7 +20,7 @@ func TestC(t *testing.T) {
 	options.SetCache(cache)
 	options.SetEnv(env)
 	options.SetInfoLog(nil)
-	options.SetWriteBufferSize(100000)
+	options.SetWriteBufferSize(1<<20)
 	options.SetParanoidChecks(true)
 	options.SetMaxOpenFiles(10)
 	options.SetBlockSize(1024)
