@@ -46,5 +46,10 @@ DB.Write.
 	wb.Put([]byte("added"), []byte("data"))
 	wb.Put([]byte("anotheradded"), []byte("more"))
 	err := db.Write(wo, wb)
+
+This documentation is not a complete discussion of LevelDB. Please read the
+LevelDB documentation for  http://code.google.com/p/leveldb information on its
+operation. You'll find lots of goodies there.
+
 */
 package levigo
