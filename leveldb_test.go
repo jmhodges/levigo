@@ -122,7 +122,10 @@ func TestC(t *testing.T) {
 		}
 	}
 
-	ranges := []Range{Range{[]byte("a"), []byte("k00000000000000010000")}, Range{[]byte("k00000000000000010000"), []byte("z")}}
+	ranges := []Range{
+		Range{[]byte("a"), []byte("k00000000000000010000")},
+		Range{[]byte("k00000000000000010000"), []byte("z")}
+	}
 	sizes := db.GetApproximateSizes(ranges)
 	if len(sizes) == 2 {
 		if sizes[0] <= 0 {
