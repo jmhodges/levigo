@@ -113,7 +113,8 @@ func (it *Iterator) Seek(key []byte) {
 	C.leveldb_iter_seek(it.Iter, (*C.char)(unsafe.Pointer(&key[0])), C.size_t(len(key)))
 }
 
-// GetError returns an error from LevelDB if it had one during iteration.
+// GetError returns an IteratorError from LevelDB if it had one during
+// iteration.
 //
 // This method is safe to call when Valid returns false.
 func (it *Iterator) GetError() error {
