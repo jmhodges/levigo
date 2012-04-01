@@ -23,9 +23,9 @@ these methods at any time.
 	...
 	err = db.Delete(wo, []byte("key"))
 
-For bulk reads, use an Iterator. For ones that you do not want to disturb
-your live traffic, be sure to call SetFillCache(false) on the ReadOptions you
-use when creating the Iterator.
+For bulk reads, use an Iterator. If you want to avoid disturbing your live
+traffic while doing the bulk read, be sure to call SetFillCache(false) on the
+ReadOptions you use when creating the Iterator.
 
 	ro := levigo.NewReadOptions()
 	ro.SetFillCache(false)
