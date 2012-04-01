@@ -9,10 +9,8 @@ levigo.Open opens and creates databases.
 	opts.SetCreateIfMissing(true)
 	db, err := levigo.Open("/path/to/db", opts)
 
-DB.Get, DB.Put and DB.Delete, respectively, get the data related to a single
-key, put data for a single key into the database, and deletes data for a
-single key. You can modify the []byte passed in and returned out of
-these methods at any time.
+The DB struct returned by Open provides DB.Get, DB.Put and DB.Delete to modify
+and query the database.
 
 	ro := levigo.NewReadOptions()
 	wo := levigo.NewWriteOptions()
