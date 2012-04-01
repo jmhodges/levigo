@@ -73,7 +73,7 @@ func (it *Iterator) Value() []byte {
 }
 
 // Next moves the iterator to the next sequential key in the database, as
-// defined by the Comparator in the ReadOptions.
+// defined by the Comparator in the ReadOptions used to create this Iterator.
 //
 // If Valid returns false, this method will panic.
 func (it *Iterator) Next() {
