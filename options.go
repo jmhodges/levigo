@@ -192,8 +192,12 @@ func (ro *ReadOptions) SetFillCache(b bool) {
 // consistent reads during a bulk operation.
 //
 // See the LevelDB documentation for details.
-func (ro *ReadOptions) SetSnapshot(snap *C.leveldb_snapshot_t) {
-	C.leveldb_readoptions_set_snapshot(ro.Opt, snap)
+func (ro *ReadOptions) SetSnapshot(snap *Snapshot) {
+	if snap != nil && snap.snap != nil {
+		C.leveldb_readoptions_set_snapshot(ro.Opt, snap.snap)
+	} else {
+		C.leveldb_readoptions_set_snapshot(ro.Opt, nil)
+	}
 }
 
 // Close deallocates the WriteOptions, freeing its underlying C struct.

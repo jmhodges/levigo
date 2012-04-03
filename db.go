@@ -35,6 +35,10 @@ type Range struct {
 	Limit []byte
 }
 
+type Snapshot struct {
+	snap *C.leveldb_snapshot_t
+}
+
 // Open opens a database.
 //
 // Creating a new database is done by calling SetCreateIfMissing(true) on the
@@ -240,14 +244,14 @@ func (db *DB) PropertyValue(propName string) string {
 // returned must be released with this DB's ReleaseSnapshot method.
 //
 // See the LevelDB documentation for details.
-func (db *DB) NewSnapshot() *C.leveldb_snapshot_t {
-	return C.leveldb_create_snapshot(db.Ldb)
+func (db *DB) NewSnapshot() *Snapshot {
+	return &Snapshot{C.leveldb_create_snapshot(db.Ldb)}
 }
 
 // ReleaseSnapshot removes the snapshot from the database's list of snapshots,
 // and deallocates it.
-func (db *DB) ReleaseSnapshot(snap *C.leveldb_snapshot_t) {
-	C.leveldb_release_snapshot(db.Ldb, snap)
+func (db *DB) ReleaseSnapshot(snap *Snapshot) {
+	C.leveldb_release_snapshot(db.Ldb, snap.snap)
 }
 
 // Close closes the database, rendering it unusable for I/O, by deallocating
