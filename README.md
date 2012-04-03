@@ -31,6 +31,6 @@ Of course, the rules apply locally with `go build` instead of `go get`.
 ## Caveats
 
 Comparators and WriteBatch iterators must be written in C in your own
-library. This is slightly better when you realize you'll have the LevelDB C
-API available to your in your client package by including levigo and its
-build.
+library. This is not quite as much of a pain in the ass when you realize
+you'll have the LevelDB C API available to your in your client package by
+including levigo and its build.
