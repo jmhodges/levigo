@@ -35,6 +35,12 @@ type Range struct {
 	Limit []byte
 }
 
+// Snapshot provides a consistent view of read operations in a DB. It is set
+// on to a ReadOptions and passed in. It is only created by DB.NewSnapshot.
+//
+// To prevent memory leaks and resource strain in the database, the snapshot
+// returned must be released with DB.ReleaseSnapshot method on the DB that
+// created it.
 type Snapshot struct {
 	snap *C.leveldb_snapshot_t
 }
@@ -241,7 +247,8 @@ func (db *DB) PropertyValue(propName string) string {
 // state of the database at the the snapshot was created.
 //
 // To prevent memory leaks and resource strain in the database, the snapshot
-// returned must be released with this DB's ReleaseSnapshot method.
+// returned must be released with DB.ReleaseSnapshot method on the DB that
+// created it.
 //
 // See the LevelDB documentation for details.
 func (db *DB) NewSnapshot() *Snapshot {
