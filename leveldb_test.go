@@ -3,13 +3,15 @@ package levigo
 import (
 	"bytes"
 	"fmt"
+	"math/rand"
 	"os"
+	"path/filepath"
 	"testing"
 )
 
 // This testcase is a port of leveldb's c_test.c.
 func TestC(t *testing.T) {
-	dbname := os.TempDir()
+	dbname := tempDir()
 	defer os.Remove(dbname)
 	env := NewDefaultEnv()
 	cache := NewLRUCache(1<<20)
@@ -181,7 +183,7 @@ func TestC(t *testing.T) {
 }
 
 func TestNilSlicesInDb(t *testing.T) {
-	dbname := os.TempDir()
+	dbname := tempDir()
 	defer os.Remove(dbname)
 	options := NewOptions()
 	options.SetErrorIfExists(true)
@@ -236,7 +238,7 @@ func TestNilSlicesInDb(t *testing.T) {
 }
 
 func TestIterationValidityLimits(t *testing.T) {
-	dbname := os.TempDir()
+	dbname := tempDir()
 	defer os.Remove(dbname)
 	options := NewOptions()
 	options.SetErrorIfExists(true)
@@ -306,4 +308,11 @@ func CheckIter(t *testing.T, it *Iterator, key, value []byte) {
 	if !bytes.Equal(value, it.Value()) {
 		t.Errorf("Iterator: expected value %v, got %v", value, it.Value())
 	}
+}
+
+func tempDir() string {
+	bottom := fmt.Sprintf("levigo-test-%d", rand.Int())
+	path := filepath.Join(os.TempDir(), bottom)
+	os.Remove(path)
+	return path
 }
