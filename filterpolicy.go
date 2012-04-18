@@ -9,8 +9,8 @@ import "C"
 // filter, such as a bloom filter, that is stored in the sstables and used by
 // DB.Get to reduce reads.
 //
-// An instance of this struct should be supplied to Options when opening a
-// DB. Typical usage uses NewBloomFilter to get an instance.
+// An instance of this struct may be supplied to Options when opening a
+// DB. Typical usage is to call NewBloomFilter to get an instance.
 //
 // To prevent memory leaks, a FilterPolicy must have Close called on it when
 // it is no longer needed by the program.
