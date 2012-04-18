@@ -237,8 +237,9 @@ func (db *DB) GetApproximateSizes(ranges []Range) []uint64 {
 // and "leveldb.num-files-at-level0".
 func (db *DB) PropertyValue(propName string) string {
 	cname := C.CString(propName)
-	defer C.free(unsafe.Pointer(cname))
-	return C.GoString(C.leveldb_property_value(db.Ldb, cname))
+	value := C.GoString(C.leveldb_property_value(db.Ldb, cname))
+	C.free(unsafe.Pointer(cname))
+	return value
 }
 
 // NewSnapshot creates a new snapshot of the database.
@@ -259,6 +260,20 @@ func (db *DB) NewSnapshot() *Snapshot {
 // and deallocates it.
 func (db *DB) ReleaseSnapshot(snap *Snapshot) {
 	C.leveldb_release_snapshot(db.Ldb, snap.snap)
+}
+
+// CompactRange runs a manual compaction on the Range of keys given. This is
+// not likely to be needed for typical usage.
+func (db *DB) CompactRange(r Range) {
+	var start, limit *C.char
+	if len(r.Start) != 0 {
+		start = (*C.char)(unsafe.Pointer(&r.Start[0]))
+	}
+	if len(r.Limit) != 0 {
+		limit = (*C.char)(unsafe.Pointer(&r.Limit[0]))
+	}
+	C.leveldb_compact_range(
+		db.Ldb, start, C.size_t(len(r.Start)), limit, C.size_t(len(r.Limit)))
 }
 
 // Close closes the database, rendering it unusable for I/O, by deallocating

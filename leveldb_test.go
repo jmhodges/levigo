@@ -171,6 +171,31 @@ func TestC(t *testing.T) {
 	CheckGet(t, "repair", db, roptions, []byte("foo"), nil)
 	CheckGet(t, "repair", db, roptions, []byte("bar"), nil)
 	CheckGet(t, "repair", db, roptions, []byte("box"), []byte("c"))
+	options.SetCreateIfMissing(true)
+	options.SetErrorIfExists(true)
+
+	// filter
+	policy := NewBloomFilter(10)
+	db.Close()
+	DestroyDatabase(dbname, options)
+	options.SetFilterPolicy(policy)
+	db, err = Open(dbname, options)
+	if err != nil {
+		t.Fatalf("Unable to recreate db for filter tests: %v", err)
+	}
+	err = db.Put(woptions, []byte("foo"), []byte("foovalue"))
+	if err != nil {
+		t.Errorf("Unable to put 'foo' with filter: %v", err)
+	}
+	err = db.Put(woptions, []byte("bar"), []byte("barvalue"))
+	if err != nil {
+		t.Errorf("Unable to put 'bar' with filter: %v", err)
+	}
+	db.CompactRange(Range{nil, nil})
+	CheckGet(t, "filter", db, roptions, []byte("foo"), []byte("foovalue"))
+    CheckGet(t, "filter", db, roptions, []byte("bar"), []byte("barvalue"))
+	options.SetFilterPolicy(nil)
+	policy.Close()
 
 	// cleanup
 	db.Close()

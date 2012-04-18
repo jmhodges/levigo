@@ -162,6 +162,16 @@ func (o *Options) SetCreateIfMissing(b bool) {
 	C.leveldb_options_set_create_if_missing(o.Opt, boolToUchar(b))
 }
 
+// SetFilterPolicy causes Open to create a new database that will uses filter
+// created from the filter policy passed in.
+func (o *Options) SetFilterPolicy(fp *FilterPolicy) {
+	var policy *C.leveldb_filterpolicy_t
+	if fp != nil {
+		policy = fp.Policy
+	}
+	C.leveldb_options_set_filter_policy(o.Opt, policy)
+}
+
 // Close deallocates the ReadOptions, freeing its underlying C struct.
 func (ro *ReadOptions) Close() {
 	C.leveldb_readoptions_destroy(ro.Opt)
