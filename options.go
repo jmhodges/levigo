@@ -203,11 +203,11 @@ func (ro *ReadOptions) SetFillCache(b bool) {
 //
 // See the LevelDB documentation for details.
 func (ro *ReadOptions) SetSnapshot(snap *Snapshot) {
-	if snap != nil && snap.snap != nil {
-		C.leveldb_readoptions_set_snapshot(ro.Opt, snap.snap)
-	} else {
-		C.leveldb_readoptions_set_snapshot(ro.Opt, nil)
+	var s *C.leveldb_snapshot_t
+	if snap != nil {
+		s = snap.snap
 	}
+	C.leveldb_readoptions_set_snapshot(ro.Opt, s)
 }
 
 // Close deallocates the WriteOptions, freeing its underlying C struct.
