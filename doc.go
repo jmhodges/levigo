@@ -47,6 +47,18 @@ DB.Write.
 	wb.Put([]byte("anotheradded"), []byte("more"))
 	err := db.Write(wo, wb)
 
+If your working dataset does not fit in memory, you'll want to add a bloom
+filter to your database. NewBloomFilter and Options.SetFilterPolicy is what
+you want. NewBloomFilter is amount of bits in the filter to use per key in
+your database.
+
+	filter := levigo.NewBloomFilter(10)
+	opts.SetFilterPolicy(filter)
+	db, err := levigo.Open("/path/to/db", opts)
+
+If you're using a custom comparator in your code, be aware you may have to
+make your own filter policy object.
+
 This documentation is not a complete discussion of LevelDB. Please read the
 LevelDB documentation for  http://code.google.com/p/leveldb information on its
 operation. You'll find lots of goodies there.
