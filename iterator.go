@@ -1,7 +1,6 @@
 package levigo
 
 // #cgo LDFLAGS: -lleveldb
-// #include <stdlib.h>
 // #include "levigo.h"
 import "C"
 
