@@ -63,8 +63,9 @@ func (it *Iterator) Key() []byte {
 		return nil
 	}
 	// Unlike DB.Get, the key, kdata, returned is not meant to be freed by the
-	// client. It's a direct reference to a Slice's data instead of a copy.
-	// So, we must not free it here but simply copy it with GoBytes.
+	// client. It's a direct reference to data managed by the iterator_t
+	// instead of a copy.  So, we must not free it here but simply copy it
+	// with GoBytes.
 	return C.GoBytes(unsafe.Pointer(kdata), C.int(klen))
 }
 
@@ -79,8 +80,9 @@ func (it *Iterator) Value() []byte {
 		return nil
 	}
 	// Unlike DB.Get, the value, vdata, returned is not meant to be freed by
-	// the client. It's a direct reference to a Slice's data instead of a
-	// copy. So, we must not free it here but simply copy it with GoBytes.
+	// the client. It's a direct reference to data managed by the iterator_t
+	// instead of a copy. So, we must not free it here but simply copy it with
+	// GoBytes.
 	return C.GoBytes(unsafe.Pointer(vdata), C.int(vlen))
 }
 
