@@ -1,6 +1,7 @@
 package levigo
 
 // #cgo LDFLAGS: -lleveldb
+// #include <stdlib.h>
 // #include "levigo.h"
 import "C"
 
@@ -59,6 +60,12 @@ func (it *Iterator) Valid() bool {
 func (it *Iterator) Key() []byte {
 	var klen C.size_t
 	kdata := C.leveldb_iter_key(it.Iter, &klen)
+	if kdata == nil {
+		return nil
+	}
+	// Unlike DB.Get, the key, kdata, returned is not meant to be freed by the
+	// client. It's a direct reference to a Slice's data instead of a copy.
+	// So, we can must not free it here but simply copy it with GoBytes.
 	return C.GoBytes(unsafe.Pointer(kdata), C.int(klen))
 }
 
@@ -69,6 +76,12 @@ func (it *Iterator) Key() []byte {
 func (it *Iterator) Value() []byte {
 	var vlen C.size_t
 	vdata := C.leveldb_iter_value(it.Iter, &vlen)
+	if vdata == nil {
+		return nil
+	}
+	// Unlike DB.Get, the value, vdata, returned is not meant to be freed by
+	// the client. It's a direct reference to a Slice's data instead of a
+	// copy. So, we can must not free it here but simply copy it with GoBytes.
 	return C.GoBytes(unsafe.Pointer(vdata), C.int(vlen))
 }
 
