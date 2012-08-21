@@ -150,6 +150,8 @@ func (db *DB) Get(ro *ReadOptions, key []byte) ([]byte, error) {
 	if value == nil {
 		return nil, nil
 	}
+
+	defer C.free(unsafe.Pointer(value))
 	return C.GoBytes(unsafe.Pointer(value), C.int(vallen)), nil
 }
 
