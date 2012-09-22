@@ -12,7 +12,12 @@ import (
 // This testcase is a port of leveldb's c_test.c.
 func TestC(t *testing.T) {
 	dbname := tempDir()
-	defer os.Remove(dbname)
+	defer func() {
+		err := os.RemoveAll(dbname)
+		if err != nil {
+			t.Errorf("Unable to remove database directory: %s", dbname)
+		}
+	}()
 	env := NewDefaultEnv()
 	cache := NewLRUCache(1<<20)
 
