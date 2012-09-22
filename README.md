@@ -22,11 +22,20 @@ But, suppose you put the shared LevelDB library somewhere weird like
 /path/to/lib and the headers were installed in /path/to/include. To install
 levigo remotely, you'll run:
 
-    CGO_CFLAGS="-I/path/to/leveldb/include" CGO_LDFLAGS="-L/path/to/lib" go get github.com/jmhodges/levigo
+    CGO_CFLAGS="-I/path/to/leveldb/include" CGO_LDFLAGS="-L/path/to/leveldb/lib" go get github.com/jmhodges/levigo
 
 and there you go.
 
-Of course, the rules apply locally with `go build` instead of `go get`.
+In order to build with snappy, you'll have to explicitly add "-lsnappy" to the
+`CGO_LDFLAGS`. Supposing that both snappy and leveldb are in weird places,
+you'll run something like:
+
+    CGO_CFLAGS="-I/path/to/leveldb/include -I/path/to/snappy/include"
+    CGO_LDFLAGS="-L/path/to/leveldb/lib -L/path/to/snappy/lib -lsnappy" go get github.com/jmhodges/levigo
+
+(and make sure the -lsnappy is after the snappy library path!).
+
+Of course, these same rules apply when doing `go build`, as well.
 
 ## Caveats
 
