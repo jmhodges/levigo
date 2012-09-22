@@ -11,13 +11,8 @@ import (
 
 // This testcase is a port of leveldb's c_test.c.
 func TestC(t *testing.T) {
-	dbname := tempDir()
-	defer func() {
-		err := os.RemoveAll(dbname)
-		if err != nil {
-			t.Errorf("Unable to remove database directory: %s", dbname)
-		}
-	}()
+	dbname := tempDir(t)
+	defer deleteDBDirectory(t, dbname)
 	env := NewDefaultEnv()
 	cache := NewLRUCache(1<<20)
 
@@ -213,8 +208,8 @@ func TestC(t *testing.T) {
 }
 
 func TestNilSlicesInDb(t *testing.T) {
-	dbname := tempDir()
-	defer os.Remove(dbname)
+	dbname := tempDir(t)
+	defer deleteDBDirectory(t, dbname)
 	options := NewOptions()
 	options.SetErrorIfExists(true)
 	options.SetCreateIfMissing(true)
@@ -268,8 +263,8 @@ func TestNilSlicesInDb(t *testing.T) {
 }
 
 func TestIterationValidityLimits(t *testing.T) {
-	dbname := tempDir()
-	defer os.Remove(dbname)
+	dbname := tempDir(t)
+	defer deleteDBDirectory(t, dbname)
 	options := NewOptions()
 	options.SetErrorIfExists(true)
 	options.SetCreateIfMissing(true)
@@ -340,9 +335,16 @@ func CheckIter(t *testing.T, it *Iterator, key, value []byte) {
 	}
 }
 
-func tempDir() string {
+func deleteDBDirectory(t *testing.T, dirPath string) {
+	err := os.RemoveAll(dirPath)
+	if err != nil {
+		t.Errorf("Unable to remove database directory: %s", dirPath)
+	}
+}
+
+func tempDir(t *testing.T) string {
 	bottom := fmt.Sprintf("levigo-test-%d", rand.Int())
 	path := filepath.Join(os.TempDir(), bottom)
-	os.Remove(path)
+	deleteDBDirectory(t, path)
 	return path
 }
