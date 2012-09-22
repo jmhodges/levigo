@@ -59,7 +59,9 @@ func Open(dbname string, o *Options) (*DB, error) {
 
 	leveldb := C.leveldb_open(o.Opt, ldbname, &errStr)
 	if errStr != nil {
-		return nil, DatabaseError(C.GoString(errStr))
+		gs := C.GoString(errStr)
+		C.free(unsafe.Pointer(errStr))
+		return nil, DatabaseError(gs)
 	}
 	return &DB{leveldb}, nil
 }
@@ -73,7 +75,9 @@ func DestroyDatabase(dbname string, o *Options) error {
 
 	C.leveldb_destroy_db(o.Opt, ldbname, &errStr)
 	if errStr != nil {
-		return DatabaseError(C.GoString(errStr))
+		gs := C.GoString(errStr)
+		C.free(unsafe.Pointer(errStr))
+		return DatabaseError(gs)
 	}
 	return nil
 }
@@ -88,7 +92,9 @@ func RepairDatabase(dbname string, o *Options) error {
 
 	C.leveldb_repair_db(o.Opt, ldbname, &errStr)
 	if errStr != nil {
-		return DatabaseError(C.GoString(errStr))
+		gs := C.GoString(errStr)
+		C.free(unsafe.Pointer(errStr))
+		return DatabaseError(gs)
 	}
 	return nil
 }
@@ -119,7 +125,9 @@ func (db *DB) Put(wo *WriteOptions, key, value []byte) error {
 		db.Ldb, wo.Opt, k, C.size_t(lenk), v, C.size_t(lenv), &errStr)
 
 	if errStr != nil {
-		return DatabaseError(C.GoString(errStr))
+		gs := C.GoString(errStr)
+		C.free(unsafe.Pointer(errStr))
+		return DatabaseError(gs)
 	}
 	return nil
 }
@@ -144,7 +152,9 @@ func (db *DB) Get(ro *ReadOptions, key []byte) ([]byte, error) {
 		db.Ldb, ro.Opt, k, C.size_t(len(key)), &vallen, &errStr)
 
 	if errStr != nil {
-		return nil, DatabaseError(C.GoString(errStr))
+		gs := C.GoString(errStr)
+		C.free(unsafe.Pointer(errStr))
+		return nil, DatabaseError(gs)
 	}
 
 	if value == nil {
@@ -170,7 +180,9 @@ func (db *DB) Delete(wo *WriteOptions, key []byte) error {
 		db.Ldb, wo.Opt, k, C.size_t(len(key)), &errStr)
 
 	if errStr != nil {
-		return DatabaseError(C.GoString(errStr))
+		gs := C.GoString(errStr)
+		C.free(unsafe.Pointer(errStr))
+		return DatabaseError(gs)
 	}
 	return nil
 }
@@ -180,7 +192,9 @@ func (db *DB) Write(wo *WriteOptions, w *WriteBatch) error {
 	var errStr *C.char
 	C.leveldb_write(db.Ldb, wo.Opt, w.wbatch, &errStr)
 	if errStr != nil {
-		return DatabaseError(C.GoString(errStr))
+		gs := C.GoString(errStr)
+		C.free(unsafe.Pointer(errStr))
+		return DatabaseError(gs)
 	}
 	return nil
 }

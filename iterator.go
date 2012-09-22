@@ -1,6 +1,7 @@
 package levigo
 
 // #cgo LDFLAGS: -lleveldb
+// #include <stdlib.h>
 // #include "levigo.h"
 import "C"
 
@@ -135,7 +136,9 @@ func (it *Iterator) GetError() error {
 	var errStr *C.char
 	C.leveldb_iter_get_error(it.Iter, &errStr)
 	if errStr != nil {
-		return IteratorError(C.GoString(errStr))
+		gs := C.GoString(errStr)
+		C.free(unsafe.Pointer(errStr))
+		return IteratorError(gs)
 	}
 	return nil
 }
