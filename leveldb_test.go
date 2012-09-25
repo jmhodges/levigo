@@ -10,6 +10,10 @@ import (
 	"time"
 )
 
+func init() {
+	rand.Seed(int64(time.Now().Nanosecond()))
+}
+
 // This testcase is a port of leveldb's c_test.c.
 func TestC(t *testing.T) {
 	dbname := tempDir(t)
@@ -344,7 +348,6 @@ func deleteDBDirectory(t *testing.T, dirPath string) {
 }
 
 func tempDir(t *testing.T) string {
-	rand.Seed(int64(time.Now().Nanosecond()))
 	bottom := fmt.Sprintf("levigo-test-%d", rand.Int())
 	path := filepath.Join(os.TempDir(), bottom)
 	deleteDBDirectory(t, path)
