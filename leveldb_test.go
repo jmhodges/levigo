@@ -7,7 +7,12 @@ import (
 	"os"
 	"path/filepath"
 	"testing"
+	"time"
 )
+
+func init() {
+	rand.Seed(int64(time.Now().Nanosecond()))
+}
 
 // This testcase is a port of leveldb's c_test.c.
 func TestC(t *testing.T) {
