@@ -11,7 +11,8 @@ Questions answered at `golang-nuts@googlegroups.com`.
 
 You'll need the shared library build of
 [LevelDB](http://code.google.com/p/leveldb/) installed on your machine. The
-current LevelDB will build it by default.
+current LevelDB will build it by default. The minimum version of LevelDB
+required is currently 1.6.
 
 Now, if you build LevelDB and put the shared library and headers in one of the
 standard places for your OS, you'll be able to simply run:
