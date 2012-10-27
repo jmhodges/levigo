@@ -1,8 +1,27 @@
 package levigo
 
-// #cgo LDFLAGS: -lleveldb
-// #include <stdlib.h>
-// #include "levigo.h"
+/*
+#cgo LDFLAGS: -lleveldb
+#include <stdlib.h>
+#include "levigo.h"
+
+// This function exists only to clean up lack-of-const warnings when
+// leveldb_approximate_sizes is called from Go-land.
+void levigo_leveldb_approximate_sizes(
+    leveldb_t* db,
+    int num_ranges,
+    char** range_start_key, const size_t* range_start_key_len,
+    char** range_limit_key, const size_t* range_limit_key_len,
+    uint64_t* sizes) {
+  leveldb_approximate_sizes(db,
+                            num_ranges,
+                            (const char* const*)range_start_key,
+                            range_start_key_len,
+                            (const char* const*)range_limit_key,
+                            range_limit_key_len,
+                            sizes);
+}
+*/
 import "C"
 
 import (
