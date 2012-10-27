@@ -37,9 +37,18 @@ func (w *WriteBatch) Put(key, value []byte) {
 	// leveldb_writebatch_put, and _delete call memcpy() (by way of
 	// Memtable::Add) when called, so we do not need to worry about these
 	// []byte being reclaimed by GC.
-	C.leveldb_writebatch_put(w.wbatch,
-		(*C.char)(unsafe.Pointer(&key[0])), C.size_t(len(key)),
-		(*C.char)(unsafe.Pointer(&value[0])), C.size_t(len(value)))
+	var k, v *C.char
+	if len(key) != 0 {
+		k = (*C.char)(unsafe.Pointer(&key[0]))
+	}
+	if len(value) != 0 {
+		v = (*C.char)(unsafe.Pointer(&value[0]))
+	}
+
+	lenk := len(key)
+	lenv := len(value)
+
+	C.leveldb_writebatch_put(w.wbatch, k, C.size_t(lenk), v, C.size_t(lenv))
 }
 
 // Delete queues a deletion of the data at key to be deleted later.
