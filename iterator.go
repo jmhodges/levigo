@@ -137,7 +137,7 @@ func (it *Iterator) GetError() error {
 	C.leveldb_iter_get_error(it.Iter, &errStr)
 	if errStr != nil {
 		gs := C.GoString(errStr)
-		C.free(unsafe.Pointer(errStr))
+		C.leveldb_free(unsafe.Pointer(errStr))
 		return IteratorError(gs)
 	}
 	return nil
