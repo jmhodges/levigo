@@ -42,3 +42,6 @@ Of course, these same rules apply when doing `go build`, as well.
 Comparators and WriteBatch iterators must be written in C in your own
 library. This seems like a pain in the ass, but remember that you'll have the
 LevelDB C API available to your in your client package when you import levigo.
+
+An example of writing your own Comparator can be found in
+<https://github.com/jmhodges/levigo/blob/master/examples>.
