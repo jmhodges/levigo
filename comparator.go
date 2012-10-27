@@ -1,7 +1,7 @@
 package levigo
 
 // #cgo LDFLAGS: -lleveldb
-// #include "levigo.h"
+// #include "leveldb/c.h"
 import "C"
 
 // DestroyComparator deallocates a *C.leveldb_comparator_t.

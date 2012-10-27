@@ -1,6 +1,6 @@
 package levigo
 
-// #include "levigo.h"
+// #include "leveldb/c.h"
 import "C"
 
 func boolToUchar(b bool) C.uchar {

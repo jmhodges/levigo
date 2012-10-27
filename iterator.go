@@ -2,7 +2,7 @@ package levigo
 
 // #cgo LDFLAGS: -lleveldb
 // #include <stdlib.h>
-// #include "levigo.h"
+// #include "leveldb/c.h"
 import "C"
 
 import (

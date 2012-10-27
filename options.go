@@ -1,7 +1,7 @@
 package levigo
 
 // #cgo LDFLAGS: -lleveldb
-// #include "levigo.h"
+// #include "leveldb/c.h"
 import "C"
 
 // CompressionOpt is a value for Options.SetCompression.
