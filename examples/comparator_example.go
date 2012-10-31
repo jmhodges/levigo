@@ -30,15 +30,15 @@ static leveldb_comparator_t* CmpFooNew() {
 import "C"
 
 type Comparator struct {
-    Comparator *C.leveldb_comparator_t
+	Comparator *C.leveldb_comparator_t
 }
 
 func NewFooComparator() *Comparator {
-    return &Comparator{C.CmpFooNew()}
+	return &Comparator{C.CmpFooNew()}
 }
 
 func (cmp *Comparator) Close() {
-    C.leveldb_comparator_destroy(cmp.Comparator)
+	C.leveldb_comparator_destroy(cmp.Comparator)
 }
 
 func main() {
