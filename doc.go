@@ -33,7 +33,7 @@ ReadOptions you use when creating the Iterator.
 	for it = it; it.Valid(); it.Next() {
 		munge(it.Key(), it.Value())
 	}
-	if err := it.GetError() {
+	if err := it.GetError(); err != nil {
 		...
 	}
 
