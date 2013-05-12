@@ -19,7 +19,7 @@ func TestC(t *testing.T) {
 	dbname := tempDir(t)
 	defer deleteDBDirectory(t, dbname)
 	env := NewDefaultEnv()
-	cache := NewLRUCache(1<<20)
+	cache := NewLRUCache(1 << 20)
 
 	options := NewOptions()
 	// options.SetComparator(cmp)
@@ -27,7 +27,7 @@ func TestC(t *testing.T) {
 	options.SetCache(cache)
 	options.SetEnv(env)
 	options.SetInfoLog(nil)
-	options.SetWriteBufferSize(1<<20)
+	options.SetWriteBufferSize(1 << 20)
 	options.SetParanoidChecks(true)
 	options.SetMaxOpenFiles(10)
 	options.SetBlockSize(1024)
@@ -124,8 +124,8 @@ func TestC(t *testing.T) {
 	}
 
 	ranges := []Range{
-		Range{[]byte("a"), []byte("k00000000000000010000")},
-		Range{[]byte("k00000000000000010000"), []byte("z")},
+		{[]byte("a"), []byte("k00000000000000010000")},
+		{[]byte("k00000000000000010000"), []byte("z")},
 	}
 	sizes := db.GetApproximateSizes(ranges)
 	if len(sizes) == 2 {
@@ -198,7 +198,7 @@ func TestC(t *testing.T) {
 	}
 	db.CompactRange(Range{nil, nil})
 	CheckGet(t, "filter", db, roptions, []byte("foo"), []byte("foovalue"))
-    CheckGet(t, "filter", db, roptions, []byte("bar"), []byte("barvalue"))
+	CheckGet(t, "filter", db, roptions, []byte("bar"), []byte("barvalue"))
 	options.SetFilterPolicy(nil)
 	policy.Close()
 
