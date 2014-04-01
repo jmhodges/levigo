@@ -16,6 +16,10 @@ func init() {
 
 // This testcase is a port of leveldb's c_test.c.
 func TestC(t *testing.T) {
+	if GetLevelDBMajorVersion() <= 0 {
+		t.Errorf("Major version cannot be less than zero")
+	}
+
 	dbname := tempDir(t)
 	defer deleteDBDirectory(t, dbname)
 	env := NewDefaultEnv()
