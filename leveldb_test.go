@@ -268,7 +268,7 @@ func TestNilSlicesInDb(t *testing.T) {
 	if err != nil {
 		t.Errorf("empty slice key Delete errored: %v", err)
 	}
-
+	db.Close()
 }
 
 func TestIterationValidityLimits(t *testing.T) {
