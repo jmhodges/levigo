@@ -54,8 +54,10 @@ type Range struct {
 	Limit []byte
 }
 
-// Snapshot provides a consistent view of read operations in a DB. It is set
-// on to a ReadOptions and passed in. It is only created by DB.NewSnapshot.
+// Snapshot provides a consistent view of read operations in a DB.
+//
+// Snapshot is used in read operations by setting it on a
+// ReadOptions. Snapshots are created by calling DB.NewSnapshot.
 //
 // To prevent memory leaks and resource strain in the database, the snapshot
 // returned must be released with DB.ReleaseSnapshot method on the DB that
@@ -120,8 +122,9 @@ func RepairDatabase(dbname string, o *Options) error {
 
 // Put writes data associated with a key to the database.
 //
-// If a nil []byte is passed in as value, it will be returned by Get as an
-// zero-length slice.
+// If a nil []byte is passed in as value, it will be returned by Get
+// as an zero-length slice. The WriteOptions passed in can be reused
+// by multiple calls to this and if the WriteOptions is left unchanged.
 //
 // The key and value byte slices may be reused safely. Put takes a copy of
 // them before returning.
@@ -187,7 +190,8 @@ func (db *DB) Get(ro *ReadOptions, key []byte) ([]byte, error) {
 // Delete removes the data associated with the key from the database.
 //
 // The key byte slice may be reused safely. Delete takes a copy of
-// them before returning.
+// them before returning. The WriteOptions passed in can be reused by
+// multiple calls to this and if the WriteOptions is left unchanged.
 func (db *DB) Delete(wo *WriteOptions, key []byte) error {
 	var errStr *C.char
 	var k *C.char
@@ -206,7 +210,8 @@ func (db *DB) Delete(wo *WriteOptions, key []byte) error {
 	return nil
 }
 
-// Write atomically writes a WriteBatch to disk.
+// Write atomically writes a WriteBatch to disk. The WriteOptions
+// passed in can be reused by multiple calls to this and other methods.
 func (db *DB) Write(wo *WriteOptions, w *WriteBatch) error {
 	var errStr *C.char
 	C.leveldb_write(db.Ldb, wo.Opt, w.wbatch, &errStr)
@@ -228,6 +233,9 @@ func (db *DB) Write(wo *WriteOptions, w *WriteBatch) error {
 // before passing it here.
 //
 // Similiarly, ReadOptions.SetSnapshot is also useful.
+//
+// The ReadOptions passed in can be reused by multiple calls to this
+// and other methods if the ReadOptions is left unchanged.
 func (db *DB) NewIterator(ro *ReadOptions) *Iterator {
 	it := C.leveldb_create_iterator(db.Ldb, ro.Opt)
 	return &Iterator{Iter: it}
@@ -279,8 +287,8 @@ func (db *DB) PropertyValue(propName string) string {
 
 // NewSnapshot creates a new snapshot of the database.
 //
-// The snapshot, when used in a ReadOptions, provides a consistent view of
-// state of the database at the the snapshot was created.
+// The Snapshot, when used in a ReadOptions, provides a consistent
+// view of state of the database at the the snapshot was created.
 //
 // To prevent memory leaks and resource strain in the database, the snapshot
 // returned must be released with DB.ReleaseSnapshot method on the DB that
