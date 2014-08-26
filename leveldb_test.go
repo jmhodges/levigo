@@ -228,6 +228,7 @@ func TestNilSlicesInDb(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Database could not be opened: %v", err)
 	}
+	defer db.Close()
 	val, err := db.Get(ro, []byte("missing"))
 	if err != nil {
 		t.Errorf("Get failed: %v", err)

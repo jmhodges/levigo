@@ -76,7 +76,7 @@ type Snapshot struct {
 func Open(dbname string, o *Options) (*DB, error) {
 	var errStr *C.char
 	ldbname := C.CString(dbname)
-	defer C.leveldb_free(unsafe.Pointer(ldbname))
+	defer C.free(unsafe.Pointer(ldbname))
 
 	leveldb := C.leveldb_open(o.Opt, ldbname, &errStr)
 	if errStr != nil {
@@ -92,7 +92,7 @@ func Open(dbname string, o *Options) (*DB, error) {
 func DestroyDatabase(dbname string, o *Options) error {
 	var errStr *C.char
 	ldbname := C.CString(dbname)
-	defer C.leveldb_free(unsafe.Pointer(ldbname))
+	defer C.free(unsafe.Pointer(ldbname))
 
 	C.leveldb_destroy_db(o.Opt, ldbname, &errStr)
 	if errStr != nil {
@@ -109,7 +109,7 @@ func DestroyDatabase(dbname string, o *Options) error {
 func RepairDatabase(dbname string, o *Options) error {
 	var errStr *C.char
 	ldbname := C.CString(dbname)
-	defer C.leveldb_free(unsafe.Pointer(ldbname))
+	defer C.free(unsafe.Pointer(ldbname))
 
 	C.leveldb_repair_db(o.Opt, ldbname, &errStr)
 	if errStr != nil {
@@ -268,8 +268,8 @@ func (db *DB) GetApproximateSizes(ranges []Range) []uint64 {
 		db.Ldb, numranges, startsPtr, startLensPtr,
 		limitsPtr, limitLensPtr, sizesPtr)
 	for i := range ranges {
-		C.leveldb_free(unsafe.Pointer(starts[i]))
-		C.leveldb_free(unsafe.Pointer(limits[i]))
+		C.free(unsafe.Pointer(starts[i]))
+		C.free(unsafe.Pointer(limits[i]))
 	}
 	return sizes
 }
@@ -281,7 +281,7 @@ func (db *DB) GetApproximateSizes(ranges []Range) []uint64 {
 func (db *DB) PropertyValue(propName string) string {
 	cname := C.CString(propName)
 	value := C.GoString(C.leveldb_property_value(db.Ldb, cname))
-	C.leveldb_free(unsafe.Pointer(cname))
+	C.free(unsafe.Pointer(cname))
 	return value
 }
 
