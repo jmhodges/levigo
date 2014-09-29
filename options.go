@@ -31,7 +31,7 @@ type Options struct {
 // To prevent memory leaks, Close must called on a ReadOptions when the
 // program no longer needs it.
 type ReadOptions struct {
-	Opt *C.leveldb_readoptions_t
+	opt *C.leveldb_readoptions_t
 }
 
 // WriteOptions represent all of the available options when writing from a
@@ -174,7 +174,7 @@ func (o *Options) SetFilterPolicy(fp *FilterPolicy) {
 
 // Close deallocates the ReadOptions, freeing its underlying C struct.
 func (ro *ReadOptions) Close() {
-	C.leveldb_readoptions_destroy(ro.Opt)
+	C.leveldb_readoptions_destroy(ro.opt)
 }
 
 // SetVerifyChecksums controls whether all data read with this ReadOptions
@@ -182,7 +182,7 @@ func (ro *ReadOptions) Close() {
 //
 // It defaults to false. See the LevelDB documentation for details.
 func (ro *ReadOptions) SetVerifyChecksums(b bool) {
-	C.leveldb_readoptions_set_verify_checksums(ro.Opt, boolToUchar(b))
+	C.leveldb_readoptions_set_verify_checksums(ro.opt, boolToUchar(b))
 }
 
 // SetFillCache controls whether reads performed with this ReadOptions will
@@ -194,7 +194,7 @@ func (ro *ReadOptions) SetVerifyChecksums(b bool) {
 //
 // See also Options.SetCache
 func (ro *ReadOptions) SetFillCache(b bool) {
-	C.leveldb_readoptions_set_fill_cache(ro.Opt, boolToUchar(b))
+	C.leveldb_readoptions_set_fill_cache(ro.opt, boolToUchar(b))
 }
 
 // SetSnapshot causes reads to provided as they were when the passed in
@@ -207,7 +207,7 @@ func (ro *ReadOptions) SetSnapshot(snap *Snapshot) {
 	if snap != nil {
 		s = snap.snap
 	}
-	C.leveldb_readoptions_set_snapshot(ro.Opt, s)
+	C.leveldb_readoptions_set_snapshot(ro.opt, s)
 }
 
 // Close deallocates the WriteOptions, freeing its underlying C struct.

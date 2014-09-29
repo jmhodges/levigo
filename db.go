@@ -171,7 +171,7 @@ func (db *DB) Get(ro *ReadOptions, key []byte) ([]byte, error) {
 	}
 
 	value := C.leveldb_get(
-		db.ldb, ro.Opt, k, C.size_t(len(key)), &vallen, &errStr)
+		db.ldb, ro.opt, k, C.size_t(len(key)), &vallen, &errStr)
 
 	if errStr != nil {
 		gs := C.GoString(errStr)
@@ -237,7 +237,7 @@ func (db *DB) Write(wo *WriteOptions, w *WriteBatch) error {
 // The ReadOptions passed in can be reused by multiple calls to this
 // and other methods if the ReadOptions is left unchanged.
 func (db *DB) NewIterator(ro *ReadOptions) *Iterator {
-	it := C.leveldb_create_iterator(db.ldb, ro.Opt)
+	it := C.leveldb_create_iterator(db.ldb, ro.opt)
 	return &Iterator{iter: it}
 }
 
