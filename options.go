@@ -22,7 +22,7 @@ const (
 // To prevent memory leaks, Close must be called on an Options when the
 // program no longer needs it.
 type Options struct {
-	Opt *C.leveldb_options_t
+	opt *C.leveldb_options_t
 }
 
 // ReadOptions represent all of the available options when reading from a
@@ -63,7 +63,7 @@ func NewWriteOptions() *WriteOptions {
 
 // Close deallocates the Options, freeing its underlying C struct.
 func (o *Options) Close() {
-	C.leveldb_options_destroy(o.Opt)
+	C.leveldb_options_destroy(o.opt)
 }
 
 // SetComparator sets the comparator to be used for all read and write
@@ -75,39 +75,39 @@ func (o *Options) Close() {
 //
 // The default comparator is usually sufficient.
 func (o *Options) SetComparator(cmp *C.leveldb_comparator_t) {
-	C.leveldb_options_set_comparator(o.Opt, cmp)
+	C.leveldb_options_set_comparator(o.opt, cmp)
 }
 
 // SetErrorIfExists, if passed true, will cause the opening of a database that
 // already exists to throw an error.
 func (o *Options) SetErrorIfExists(error_if_exists bool) {
 	eie := boolToUchar(error_if_exists)
-	C.leveldb_options_set_error_if_exists(o.Opt, eie)
+	C.leveldb_options_set_error_if_exists(o.opt, eie)
 }
 
 // SetCache places a cache object in the database when a database is opened.
 //
 // This is usually wise to use. See also ReadOptions.SetFillCache.
 func (o *Options) SetCache(cache *Cache) {
-	C.leveldb_options_set_cache(o.Opt, cache.Cache)
+	C.leveldb_options_set_cache(o.opt, cache.Cache)
 }
 
 // SetEnv sets the Env object for the new database handle.
 func (o *Options) SetEnv(env *Env) {
-	C.leveldb_options_set_env(o.Opt, env.Env)
+	C.leveldb_options_set_env(o.opt, env.Env)
 }
 
 // SetInfoLog sets a *C.leveldb_logger_t object as the informational logger
 // for the database.
 func (o *Options) SetInfoLog(log *C.leveldb_logger_t) {
-	C.leveldb_options_set_info_log(o.Opt, log)
+	C.leveldb_options_set_info_log(o.opt, log)
 }
 
 // SetWriteBufferSize sets the number of bytes the database will build up in
 // memory (backed by an unsorted log on disk) before converting to a sorted
 // on-disk file.
 func (o *Options) SetWriteBufferSize(s int) {
-	C.leveldb_options_set_write_buffer_size(o.Opt, C.size_t(s))
+	C.leveldb_options_set_write_buffer_size(o.opt, C.size_t(s))
 }
 
 // SetParanoidChecks, when called with true, will cause the database to do
@@ -116,7 +116,7 @@ func (o *Options) SetWriteBufferSize(s int) {
 //
 // See the LevelDB documentation docs for details.
 func (o *Options) SetParanoidChecks(pc bool) {
-	C.leveldb_options_set_paranoid_checks(o.Opt, boolToUchar(pc))
+	C.leveldb_options_set_paranoid_checks(o.opt, boolToUchar(pc))
 }
 
 // SetMaxOpenFiles sets the number of files than can be used at once by the
@@ -124,7 +124,7 @@ func (o *Options) SetParanoidChecks(pc bool) {
 //
 // See the LevelDB documentation for details.
 func (o *Options) SetMaxOpenFiles(n int) {
-	C.leveldb_options_set_max_open_files(o.Opt, C.int(n))
+	C.leveldb_options_set_max_open_files(o.opt, C.int(n))
 }
 
 // SetBlockSize sets the approximate size of user data packed per block.
@@ -132,7 +132,7 @@ func (o *Options) SetMaxOpenFiles(n int) {
 // The default is roughly 4096 uncompressed bytes. A better setting depends on
 // your use case. See the LevelDB documentation for details.
 func (o *Options) SetBlockSize(s int) {
-	C.leveldb_options_set_block_size(o.Opt, C.size_t(s))
+	C.leveldb_options_set_block_size(o.opt, C.size_t(s))
 }
 
 // SetBlockRestartInterval is the number of keys between restarts points for
@@ -141,7 +141,7 @@ func (o *Options) SetBlockSize(s int) {
 // Most clients should leave this parameter alone. See the LevelDB
 // documentation for details.
 func (o *Options) SetBlockRestartInterval(n int) {
-	C.leveldb_options_set_block_restart_interval(o.Opt, C.int(n))
+	C.leveldb_options_set_block_restart_interval(o.opt, C.int(n))
 }
 
 // SetCompression sets whether to compress blocks using the specified
@@ -153,13 +153,13 @@ func (o *Options) SetBlockRestartInterval(n int) {
 // If the LevelDB library was built without Snappy compression enabled, the
 // SnappyCompression setting will be ignored.
 func (o *Options) SetCompression(t CompressionOpt) {
-	C.leveldb_options_set_compression(o.Opt, C.int(t))
+	C.leveldb_options_set_compression(o.opt, C.int(t))
 }
 
 // SetCreateIfMissing causes Open to create a new database on disk if it does
 // not already exist.
 func (o *Options) SetCreateIfMissing(b bool) {
-	C.leveldb_options_set_create_if_missing(o.Opt, boolToUchar(b))
+	C.leveldb_options_set_create_if_missing(o.opt, boolToUchar(b))
 }
 
 // SetFilterPolicy causes Open to create a new database that will uses filter
@@ -169,7 +169,7 @@ func (o *Options) SetFilterPolicy(fp *FilterPolicy) {
 	if fp != nil {
 		policy = fp.Policy
 	}
-	C.leveldb_options_set_filter_policy(o.Opt, policy)
+	C.leveldb_options_set_filter_policy(o.opt, policy)
 }
 
 // Close deallocates the ReadOptions, freeing its underlying C struct.
