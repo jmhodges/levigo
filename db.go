@@ -25,13 +25,15 @@ void levigo_leveldb_approximate_sizes(
 import "C"
 
 import (
+	"fmt"
 	"unsafe"
 )
 
+// DatabaseError wraps general internal LevelDB errors for user consumption.
 type DatabaseError string
 
 func (e DatabaseError) Error() string {
-	return string(e)
+	return fmt.Sprintf("levigo: %s", e)
 }
 
 // DB is a reusable handle to a LevelDB database on disk, created by Open.

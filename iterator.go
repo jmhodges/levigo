@@ -6,13 +6,14 @@ package levigo
 import "C"
 
 import (
+	"fmt"
 	"unsafe"
 )
 
 type IteratorError string
 
 func (e IteratorError) Error() string {
-	return string(e)
+	return fmt.Sprintf("levigo iterator: %s", e)
 }
 
 // Iterator is a read-only iterator through a LevelDB database. It provides a
