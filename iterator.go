@@ -45,13 +45,13 @@ func (e IteratorError) Error() string {
 // To prevent memory leaks, an Iterator must have Close called on it when it
 // is no longer needed by the program.
 type Iterator struct {
-	Iter *C.leveldb_iterator_t
+	iter *C.leveldb_iterator_t
 }
 
 // Valid returns false only when an Iterator has iterated past either the
 // first or the last key in the database.
 func (it *Iterator) Valid() bool {
-	return ucharToBool(C.leveldb_iter_valid(it.Iter))
+	return ucharToBool(C.leveldb_iter_valid(it.iter))
 }
 
 // Key returns a copy the key in the database the iterator currently holds.
@@ -59,7 +59,7 @@ func (it *Iterator) Valid() bool {
 // If Valid returns false, this method will panic.
 func (it *Iterator) Key() []byte {
 	var klen C.size_t
-	kdata := C.leveldb_iter_key(it.Iter, &klen)
+	kdata := C.leveldb_iter_key(it.iter, &klen)
 	if kdata == nil {
 		return nil
 	}
@@ -76,7 +76,7 @@ func (it *Iterator) Key() []byte {
 // If Valid returns false, this method will panic.
 func (it *Iterator) Value() []byte {
 	var vlen C.size_t
-	vdata := C.leveldb_iter_value(it.Iter, &vlen)
+	vdata := C.leveldb_iter_value(it.iter, &vlen)
 	if vdata == nil {
 		return nil
 	}
@@ -92,7 +92,7 @@ func (it *Iterator) Value() []byte {
 //
 // If Valid returns false, this method will panic.
 func (it *Iterator) Next() {
-	C.leveldb_iter_next(it.Iter)
+	C.leveldb_iter_next(it.iter)
 }
 
 // Prev moves the iterator to the previous sequential key in the database, as
@@ -100,7 +100,7 @@ func (it *Iterator) Next() {
 //
 // If Valid returns false, this method will panic.
 func (it *Iterator) Prev() {
-	C.leveldb_iter_prev(it.Iter)
+	C.leveldb_iter_prev(it.iter)
 }
 
 // SeekToFirst moves the iterator to the first key in the database, as defined
@@ -108,7 +108,7 @@ func (it *Iterator) Prev() {
 //
 // This method is safe to call when Valid returns false.
 func (it *Iterator) SeekToFirst() {
-	C.leveldb_iter_seek_to_first(it.Iter)
+	C.leveldb_iter_seek_to_first(it.iter)
 }
 
 // SeekToLast moves the iterator to the last key in the database, as defined
@@ -116,7 +116,7 @@ func (it *Iterator) SeekToFirst() {
 //
 // This method is safe to call when Valid returns false.
 func (it *Iterator) SeekToLast() {
-	C.leveldb_iter_seek_to_last(it.Iter)
+	C.leveldb_iter_seek_to_last(it.iter)
 }
 
 // Seek moves the iterator the position of the key given or, if the key
@@ -125,7 +125,7 @@ func (it *Iterator) SeekToLast() {
 //
 // This method is safe to call when Valid returns false.
 func (it *Iterator) Seek(key []byte) {
-	C.leveldb_iter_seek(it.Iter, (*C.char)(unsafe.Pointer(&key[0])), C.size_t(len(key)))
+	C.leveldb_iter_seek(it.iter, (*C.char)(unsafe.Pointer(&key[0])), C.size_t(len(key)))
 }
 
 // GetError returns an IteratorError from LevelDB if it had one during
@@ -134,7 +134,7 @@ func (it *Iterator) Seek(key []byte) {
 // This method is safe to call when Valid returns false.
 func (it *Iterator) GetError() error {
 	var errStr *C.char
-	C.leveldb_iter_get_error(it.Iter, &errStr)
+	C.leveldb_iter_get_error(it.iter, &errStr)
 	if errStr != nil {
 		gs := C.GoString(errStr)
 		C.leveldb_free(unsafe.Pointer(errStr))
@@ -145,6 +145,6 @@ func (it *Iterator) GetError() error {
 
 // Close deallocates the given Iterator, freeing the underlying C struct.
 func (it *Iterator) Close() {
-	C.leveldb_iter_destroy(it.Iter)
-	it.Iter = nil
+	C.leveldb_iter_destroy(it.iter)
+	it.iter = nil
 }

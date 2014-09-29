@@ -44,7 +44,7 @@ func (e DatabaseError) Error() string {
 // conditions will occur if the same key is written to from more than one, of
 // course.
 type DB struct {
-	Ldb *C.leveldb_t
+	ldb *C.leveldb_t
 }
 
 // Range is a range of keys in the database. GetApproximateSizes calls with it
@@ -144,7 +144,7 @@ func (db *DB) Put(wo *WriteOptions, key, value []byte) error {
 	lenk := len(key)
 	lenv := len(value)
 	C.leveldb_put(
-		db.Ldb, wo.Opt, k, C.size_t(lenk), v, C.size_t(lenv), &errStr)
+		db.ldb, wo.Opt, k, C.size_t(lenk), v, C.size_t(lenv), &errStr)
 
 	if errStr != nil {
 		gs := C.GoString(errStr)
@@ -171,7 +171,7 @@ func (db *DB) Get(ro *ReadOptions, key []byte) ([]byte, error) {
 	}
 
 	value := C.leveldb_get(
-		db.Ldb, ro.Opt, k, C.size_t(len(key)), &vallen, &errStr)
+		db.ldb, ro.Opt, k, C.size_t(len(key)), &vallen, &errStr)
 
 	if errStr != nil {
 		gs := C.GoString(errStr)
@@ -200,7 +200,7 @@ func (db *DB) Delete(wo *WriteOptions, key []byte) error {
 	}
 
 	C.leveldb_delete(
-		db.Ldb, wo.Opt, k, C.size_t(len(key)), &errStr)
+		db.ldb, wo.Opt, k, C.size_t(len(key)), &errStr)
 
 	if errStr != nil {
 		gs := C.GoString(errStr)
@@ -214,7 +214,7 @@ func (db *DB) Delete(wo *WriteOptions, key []byte) error {
 // passed in can be reused by multiple calls to this and other methods.
 func (db *DB) Write(wo *WriteOptions, w *WriteBatch) error {
 	var errStr *C.char
-	C.leveldb_write(db.Ldb, wo.Opt, w.wbatch, &errStr)
+	C.leveldb_write(db.ldb, wo.Opt, w.wbatch, &errStr)
 	if errStr != nil {
 		gs := C.GoString(errStr)
 		C.leveldb_free(unsafe.Pointer(errStr))
@@ -237,8 +237,8 @@ func (db *DB) Write(wo *WriteOptions, w *WriteBatch) error {
 // The ReadOptions passed in can be reused by multiple calls to this
 // and other methods if the ReadOptions is left unchanged.
 func (db *DB) NewIterator(ro *ReadOptions) *Iterator {
-	it := C.leveldb_create_iterator(db.Ldb, ro.Opt)
-	return &Iterator{Iter: it}
+	it := C.leveldb_create_iterator(db.ldb, ro.Opt)
+	return &Iterator{iter: it}
 }
 
 // GetApproximateSizes returns the approximate number of bytes of file system
@@ -265,7 +265,7 @@ func (db *DB) GetApproximateSizes(ranges []Range) []uint64 {
 	limitLensPtr := &limitLens[0]
 	sizesPtr := (*C.uint64_t)(&sizes[0])
 	C.levigo_leveldb_approximate_sizes(
-		db.Ldb, numranges, startsPtr, startLensPtr,
+		db.ldb, numranges, startsPtr, startLensPtr,
 		limitsPtr, limitLensPtr, sizesPtr)
 	for i := range ranges {
 		C.free(unsafe.Pointer(starts[i]))
@@ -280,7 +280,7 @@ func (db *DB) GetApproximateSizes(ranges []Range) []uint64 {
 // and "leveldb.num-files-at-level0".
 func (db *DB) PropertyValue(propName string) string {
 	cname := C.CString(propName)
-	value := C.GoString(C.leveldb_property_value(db.Ldb, cname))
+	value := C.GoString(C.leveldb_property_value(db.ldb, cname))
 	C.free(unsafe.Pointer(cname))
 	return value
 }
@@ -296,13 +296,13 @@ func (db *DB) PropertyValue(propName string) string {
 //
 // See the LevelDB documentation for details.
 func (db *DB) NewSnapshot() *Snapshot {
-	return &Snapshot{C.leveldb_create_snapshot(db.Ldb)}
+	return &Snapshot{C.leveldb_create_snapshot(db.ldb)}
 }
 
 // ReleaseSnapshot removes the snapshot from the database's list of snapshots,
 // and deallocates it.
 func (db *DB) ReleaseSnapshot(snap *Snapshot) {
-	C.leveldb_release_snapshot(db.Ldb, snap.snap)
+	C.leveldb_release_snapshot(db.ldb, snap.snap)
 }
 
 // CompactRange runs a manual compaction on the Range of keys given. This is
@@ -316,7 +316,7 @@ func (db *DB) CompactRange(r Range) {
 		limit = (*C.char)(unsafe.Pointer(&r.Limit[0]))
 	}
 	C.leveldb_compact_range(
-		db.Ldb, start, C.size_t(len(r.Start)), limit, C.size_t(len(r.Limit)))
+		db.ldb, start, C.size_t(len(r.Start)), limit, C.size_t(len(r.Limit)))
 }
 
 // Close closes the database, rendering it unusable for I/O, by deallocating
@@ -324,5 +324,5 @@ func (db *DB) CompactRange(r Range) {
 //
 // Any attempts to use the DB after Close is called will panic.
 func (db *DB) Close() {
-	C.leveldb_close(db.Ldb)
+	C.leveldb_close(db.ldb)
 }
