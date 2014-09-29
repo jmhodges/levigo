@@ -50,7 +50,7 @@ type DB struct {
 }
 
 // Range is a range of keys in the database. GetApproximateSizes calls with it
-// begins at the key Start and end right before the key Limit.
+// begin at the key Start and end right before the key Limit.
 type Range struct {
 	Start []byte
 	Limit []byte
