@@ -40,7 +40,7 @@ type ReadOptions struct {
 // To prevent memory leaks, Close must called on a WriteOptions when the
 // program no longer needs it.
 type WriteOptions struct {
-	Opt *C.leveldb_writeoptions_t
+	opt *C.leveldb_writeoptions_t
 }
 
 // NewOptions allocates a new Options object.
@@ -212,7 +212,7 @@ func (ro *ReadOptions) SetSnapshot(snap *Snapshot) {
 
 // Close deallocates the WriteOptions, freeing its underlying C struct.
 func (wo *WriteOptions) Close() {
-	C.leveldb_writeoptions_destroy(wo.Opt)
+	C.leveldb_writeoptions_destroy(wo.opt)
 }
 
 // SetSync controls whether each write performed with this WriteOptions will
@@ -225,5 +225,5 @@ func (wo *WriteOptions) Close() {
 //
 // See the LevelDB documentation for details.
 func (wo *WriteOptions) SetSync(b bool) {
-	C.leveldb_writeoptions_set_sync(wo.Opt, boolToUchar(b))
+	C.leveldb_writeoptions_set_sync(wo.opt, boolToUchar(b))
 }

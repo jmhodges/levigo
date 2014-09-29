@@ -144,7 +144,7 @@ func (db *DB) Put(wo *WriteOptions, key, value []byte) error {
 	lenk := len(key)
 	lenv := len(value)
 	C.leveldb_put(
-		db.ldb, wo.Opt, k, C.size_t(lenk), v, C.size_t(lenv), &errStr)
+		db.ldb, wo.opt, k, C.size_t(lenk), v, C.size_t(lenv), &errStr)
 
 	if errStr != nil {
 		gs := C.GoString(errStr)
@@ -200,7 +200,7 @@ func (db *DB) Delete(wo *WriteOptions, key []byte) error {
 	}
 
 	C.leveldb_delete(
-		db.ldb, wo.Opt, k, C.size_t(len(key)), &errStr)
+		db.ldb, wo.opt, k, C.size_t(len(key)), &errStr)
 
 	if errStr != nil {
 		gs := C.GoString(errStr)
@@ -214,7 +214,7 @@ func (db *DB) Delete(wo *WriteOptions, key []byte) error {
 // passed in can be reused by multiple calls to this and other methods.
 func (db *DB) Write(wo *WriteOptions, w *WriteBatch) error {
 	var errStr *C.char
-	C.leveldb_write(db.ldb, wo.Opt, w.wbatch, &errStr)
+	C.leveldb_write(db.ldb, wo.opt, w.wbatch, &errStr)
 	if errStr != nil {
 		gs := C.GoString(errStr)
 		C.leveldb_free(unsafe.Pointer(errStr))
