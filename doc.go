@@ -30,7 +30,8 @@ ReadOptions you use when creating the Iterator.
 	it := db.NewIterator(ro)
 	defer it.Close()
 	it.Seek(mykey)
-	for it = it; it.Valid(); it.Next() {
+	for it.Valid() {
+		it.Next()
 		munge(it.Key(), it.Value())
 	}
 	if err := it.GetError(); err != nil {
