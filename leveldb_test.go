@@ -117,7 +117,6 @@ func TestC(t *testing.T) {
 
 	// approximate sizes
 	n := 20000
-	woptions.SetSync(false)
 	for i := 0; i < n; i++ {
 		keybuf := []byte(fmt.Sprintf("k%020d", i))
 		valbuf := []byte(fmt.Sprintf("v%020d", i))
