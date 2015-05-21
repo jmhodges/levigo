@@ -25,6 +25,7 @@ void levigo_leveldb_approximate_sizes(
 import "C"
 
 import (
+	"errors"
 	"unsafe"
 )
 
@@ -33,6 +34,8 @@ type DatabaseError string
 func (e DatabaseError) Error() string {
 	return string(e)
 }
+
+const ErrDBClosed = errors.New("database is closed")
 
 // DB is a reusable handle to a LevelDB database on disk, created by Open.
 //
@@ -45,6 +48,8 @@ func (e DatabaseError) Error() string {
 // course.
 type DB struct {
 	Ldb *C.leveldb_t
+
+	closed bool
 }
 
 // Range is a range of keys in the database. GetApproximateSizes calls with it
@@ -84,7 +89,7 @@ func Open(dbname string, o *Options) (*DB, error) {
 		C.leveldb_free(unsafe.Pointer(errStr))
 		return nil, DatabaseError(gs)
 	}
-	return &DB{leveldb}, nil
+	return &DB{leveldb, false}, nil
 }
 
 // DestroyDatabase removes a database entirely, removing everything from the
@@ -129,6 +134,10 @@ func RepairDatabase(dbname string, o *Options) error {
 // The key and value byte slices may be reused safely. Put takes a copy of
 // them before returning.
 func (db *DB) Put(wo *WriteOptions, key, value []byte) error {
+	if db.closed {
+		panic(ErrDBClosed)
+	}
+
 	var errStr *C.char
 	// leveldb_put, _get, and _delete call memcpy() (by way of Memtable::Add)
 	// when called, so we do not need to worry about these []byte being
@@ -163,6 +172,10 @@ func (db *DB) Put(wo *WriteOptions, key, value []byte) error {
 // The key byte slice may be reused safely. Get takes a copy of
 // them before returning.
 func (db *DB) Get(ro *ReadOptions, key []byte) ([]byte, error) {
+	if db.closed {
+		panic(ErrDBClosed)
+	}
+
 	var errStr *C.char
 	var vallen C.size_t
 	var k *C.char
@@ -193,6 +206,10 @@ func (db *DB) Get(ro *ReadOptions, key []byte) ([]byte, error) {
 // them before returning. The WriteOptions passed in can be reused by
 // multiple calls to this and if the WriteOptions is left unchanged.
 func (db *DB) Delete(wo *WriteOptions, key []byte) error {
+	if db.closed {
+		panic(ErrDBClosed)
+	}
+
 	var errStr *C.char
 	var k *C.char
 	if len(key) != 0 {
@@ -213,6 +230,10 @@ func (db *DB) Delete(wo *WriteOptions, key []byte) error {
 // Write atomically writes a WriteBatch to disk. The WriteOptions
 // passed in can be reused by multiple calls to this and other methods.
 func (db *DB) Write(wo *WriteOptions, w *WriteBatch) error {
+	if db.closed {
+		panic(ErrDBClosed)
+	}
+
 	var errStr *C.char
 	C.leveldb_write(db.Ldb, wo.Opt, w.wbatch, &errStr)
 	if errStr != nil {
@@ -237,6 +258,10 @@ func (db *DB) Write(wo *WriteOptions, w *WriteBatch) error {
 // The ReadOptions passed in can be reused by multiple calls to this
 // and other methods if the ReadOptions is left unchanged.
 func (db *DB) NewIterator(ro *ReadOptions) *Iterator {
+	if db.closed {
+		panic(ErrDBClosed)
+	}
+
 	it := C.leveldb_create_iterator(db.Ldb, ro.Opt)
 	return &Iterator{Iter: it}
 }
@@ -279,6 +304,10 @@ func (db *DB) GetApproximateSizes(ranges []Range) []uint64 {
 // Examples of properties include "leveldb.stats", "leveldb.sstables",
 // and "leveldb.num-files-at-level0".
 func (db *DB) PropertyValue(propName string) string {
+	if db.closed {
+		panic(ErrDBClosed)
+	}
+
 	cname := C.CString(propName)
 	value := C.GoString(C.leveldb_property_value(db.Ldb, cname))
 	C.free(unsafe.Pointer(cname))
@@ -296,18 +325,30 @@ func (db *DB) PropertyValue(propName string) string {
 //
 // See the LevelDB documentation for details.
 func (db *DB) NewSnapshot() *Snapshot {
+	if db.closed {
+		panic(ErrDBClosed)
+	}
+
 	return &Snapshot{C.leveldb_create_snapshot(db.Ldb)}
 }
 
 // ReleaseSnapshot removes the snapshot from the database's list of snapshots,
 // and deallocates it.
 func (db *DB) ReleaseSnapshot(snap *Snapshot) {
+	if db.closed {
+		panic(ErrDBClosed)
+	}
+
 	C.leveldb_release_snapshot(db.Ldb, snap.snap)
 }
 
 // CompactRange runs a manual compaction on the Range of keys given. This is
 // not likely to be needed for typical usage.
 func (db *DB) CompactRange(r Range) {
+	if db.closed {
+		panic(ErrDBClosed)
+	}
+
 	var start, limit *C.char
 	if len(r.Start) != 0 {
 		start = (*C.char)(unsafe.Pointer(&r.Start[0]))
@@ -324,5 +365,10 @@ func (db *DB) CompactRange(r Range) {
 //
 // Any attempts to use the DB after Close is called will panic.
 func (db *DB) Close() {
+	if db.closed {
+		return
+	}
+
+	db.closed = true
 	C.leveldb_close(db.Ldb)
 }
