@@ -35,7 +35,7 @@ func (e DatabaseError) Error() string {
 	return string(e)
 }
 
-const ErrDBClosed = errors.New("database is closed")
+var ErrDBClosed = errors.New("database is closed")
 
 // DB is a reusable handle to a LevelDB database on disk, created by Open.
 //
