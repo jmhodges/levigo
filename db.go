@@ -49,6 +49,20 @@ var ErrDBClosed = errors.New("database is closed")
 type DB struct {
 	Ldb *C.leveldb_t
 
+	// TLDR: Closed is not racey, it's a best attempt. If `-race` says it's racey,
+	// then it's your code that is racey, not levigo.
+	//
+	// This indicates if the DB is closed or not. LevelDB provides it's own closed
+	// detection that appears in the form of a sigtrap panic, which can be quite
+	// confusing. So rather than users hit that, we attempt to give them a better
+	// panic by checking this flag in functions that LevelDB would have done
+	// it's own panic. This is not protected by a mutex because it's a best case
+	// attempt to catch invalid usage. If access in racey and gets to LevelDB,
+	// so be it, the user will see the sigtrap panic.
+	// Because LevelDB has it's own mutex to detect the usage, we didn't want to
+	// put another one up here and drive performance down even more.
+	// So if you use `-race` and it says closed is racey, it's your code that is
+	// racey, not levigo.
 	closed bool
 }
 
