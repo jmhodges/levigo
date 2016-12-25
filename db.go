@@ -97,7 +97,7 @@ func Open(dbname string, o *Options) (*DB, error) {
 	ldbname := C.CString(dbname)
 	defer C.free(unsafe.Pointer(ldbname))
 
-	leveldb := C.leveldb_open(o.Opt, ldbname, &errStr)
+	leveldb := C.leveldb_open(o.opt, ldbname, &errStr)
 	if errStr != nil {
 		gs := C.GoString(errStr)
 		C.leveldb_free(unsafe.Pointer(errStr))
@@ -113,7 +113,7 @@ func DestroyDatabase(dbname string, o *Options) error {
 	ldbname := C.CString(dbname)
 	defer C.free(unsafe.Pointer(ldbname))
 
-	C.leveldb_destroy_db(o.Opt, ldbname, &errStr)
+	C.leveldb_destroy_db(o.opt, ldbname, &errStr)
 	if errStr != nil {
 		gs := C.GoString(errStr)
 		C.leveldb_free(unsafe.Pointer(errStr))
@@ -130,7 +130,7 @@ func RepairDatabase(dbname string, o *Options) error {
 	ldbname := C.CString(dbname)
 	defer C.free(unsafe.Pointer(ldbname))
 
-	C.leveldb_repair_db(o.Opt, ldbname, &errStr)
+	C.leveldb_repair_db(o.opt, ldbname, &errStr)
 	if errStr != nil {
 		gs := C.GoString(errStr)
 		C.leveldb_free(unsafe.Pointer(errStr))
