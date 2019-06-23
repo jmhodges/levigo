@@ -1,4 +1,4 @@
-[![GoDoc](https://godoc.org/github.com/jmhdoges/levigo?status.svg)](https://godoc.org/github.com/jmhdoges/levigo)
+[![GoDoc](https://godoc.org/github.com/jmhodges/levigo?status.svg)](https://godoc.org/github.com/jmhodges/levigo)
 
 # levigo
 
