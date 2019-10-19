@@ -1,9 +1,0 @@
-language: go
-
-go:
-  - 1.13.3
-
-install: true
-
-script: cd .travis && make
-
