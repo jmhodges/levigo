@@ -12,7 +12,7 @@ import (
 type IteratorError string
 
 func (e IteratorError) Error() string {
-	return string(e)
+	return "levigo: " + string(e)
 }
 
 // Iterator is a read-only iterator through a LevelDB database. It provides a
