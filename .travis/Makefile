@@ -1,18 +1,18 @@
 all: test
 
 LEVELDB_VERSION ?= v1.18
-SNAPPY_VERSION ?= 1.1.1
+SNAPPY_VERSION ?= 1.1.7
 
 export CFLAGS ?= -I$(PWD)/root/snappy-$(SNAPPY_VERSION)/include
-export CXXFLAGS ?= -I$(PWD)/root/snappy-$(SNAPPY_VERSION)/include
-export LDFLAGS ?= -L$(PWD)/root/snappy-$(SNAPPY_VERSION)/lib
-export CGO_CFLAGS ?= -I$(PWD)/root/snappy-$(SNAPPY_VERSION)/include -I$(PWD)/root/leveldb/include
-export CGO_LDFLAGS ?= -L$(PWD)/root/snappy-$(SNAPPY_VERSION)/lib -L$(PWD)/root/leveldb -lsnappy
+export CXXFLAGS ?= -I$(PWD)/root/snappy-$(SNAPPY_VERSION)/build
+export LDFLAGS ?= -L$(PWD)/root/snappy-$(SNAPPY_VERSION)/build
+export CGO_CFLAGS ?= -I$(PWD)/root/snappy-$(SNAPPY_VERSION)/build -I$(PWD)/root/leveldb/include
+export CGO_LDFLAGS ?= -L$(PWD)/root/snappy-$(SNAPPY_VERSION)/build -L$(PWD)/root/leveldb -lsnappy
 export GOPATH ?= $(PWD)/root/go
-export LD_LIBRARY_PATH := $(PWD)/root/snappy-$(SNAPPY_VERSION)/lib:$(PWD)/root/leveldb:$(LD_LIBRARY_PATH)
+export LD_LIBRARY_PATH := $(PWD)/root/snappy-$(SNAPPY_VERSION)/build:$(PWD)/root/leveldb:$(LD_LIBRARY_PATH)
 
 archives/snappy-$(SNAPPY_VERSION).tar.gz: archives
-	curl https://snappy.googlecode.com/files/snappy-$(SNAPPY_VERSION).tar.gz > $@
+	curl -L https://github.com/google/snappy/archive/$(SNAPPY_VERSION).tar.gz > $@
 
 archives:
 	mkdir -v archives
@@ -37,8 +37,7 @@ root/snappy-$(SNAPPY_VERSION): archives/snappy-$(SNAPPY_VERSION).tar.gz root
 	tar xzvf archives/snappy-$(SNAPPY_VERSION).tar.gz -C root
 
 root/snappy-$(SNAPPY_VERSION)/STAMP: root/snappy-$(SNAPPY_VERSION)
-	cd root/snappy-$(SNAPPY_VERSION) && ./configure --prefix=$$(pwd)
-	$(MAKE) -C root/snappy-$(SNAPPY_VERSION) install
+	mkdir -p root/snappy-$(SNAPPY_VERSION)/build && cd root/snappy-$(SNAPPY_VERSION)/build && cmake -DCMAKE_INSTALL_PREFIX:PATH=$(pwd) ../ && make
 	touch $@
 
 test: levigo
