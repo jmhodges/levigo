@@ -36,6 +36,7 @@ func (e DatabaseError) Error() string {
 	return "levigo: " + string(e)
 }
 
+// ErrDBClosed is returned by DB.Close when its been called previously.
 var ErrDBClosed = errors.New("database is closed")
 
 // DB is a reusable handle to a LevelDB database on disk, created by Open.

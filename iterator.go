@@ -9,6 +9,7 @@ import (
 	"unsafe"
 )
 
+// IteratorError wraps general internal LevelDB iterator errors for user consumption.
 type IteratorError string
 
 func (e IteratorError) Error() string {
