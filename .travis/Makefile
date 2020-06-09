@@ -1,6 +1,6 @@
 all: test
 
-LEVELDB_VERSION ?= v1.18
+LEVELDB_VERSION ?= 1.22
 SNAPPY_VERSION ?= 1.1.7
 
 export CFLAGS ?= -I$(PWD)/root/snappy-$(SNAPPY_VERSION)/include
