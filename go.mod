@@ -1,3 +1,3 @@
-module github.com/jmhodges/levigo
+module github.com/sattler/levigo
 
 go 1.13

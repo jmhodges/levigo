@@ -1,13 +1,13 @@
 all: test
 
-LEVELDB_VERSION ?= v1.18
+LEVELDB_VERSION ?= 1.22
 SNAPPY_VERSION ?= 1.1.7
 
 export CFLAGS ?= -I$(PWD)/root/snappy-$(SNAPPY_VERSION)/include
 export CXXFLAGS ?= -I$(PWD)/root/snappy-$(SNAPPY_VERSION)/build
 export LDFLAGS ?= -L$(PWD)/root/snappy-$(SNAPPY_VERSION)/build
 export CGO_CFLAGS ?= -I$(PWD)/root/snappy-$(SNAPPY_VERSION)/build -I$(PWD)/root/leveldb/include
-export CGO_LDFLAGS ?= -L$(PWD)/root/snappy-$(SNAPPY_VERSION)/build -L$(PWD)/root/leveldb -lsnappy
+export CGO_LDFLAGS ?= -L$(PWD)/root/snappy-$(SNAPPY_VERSION)/build -L$(PWD)/root/leveldb/build -lsnappy
 export GOPATH ?= $(PWD)/root/go
 export LD_LIBRARY_PATH := $(PWD)/root/snappy-$(SNAPPY_VERSION)/build:$(PWD)/root/leveldb:$(LD_LIBRARY_PATH)
 
@@ -30,7 +30,8 @@ root/leveldb: root
 
 root/leveldb/STAMP: root/leveldb root/snappy-$(SNAPPY_VERSION)/STAMP
 	cd root/leveldb && git checkout $(LEVELDB_VERSION)
-	$(MAKE) -C root/leveldb
+	cmake --DCMAKE_BUILD_TYPE=Release -S root/leveldb -B root/leveldb/build
+	cmake --build root/leveldb/build
 	touch $@
 
 root/snappy-$(SNAPPY_VERSION): archives/snappy-$(SNAPPY_VERSION).tar.gz root

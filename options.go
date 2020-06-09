@@ -134,6 +134,14 @@ func (o *Options) SetBlockSize(s int) {
 	C.leveldb_options_set_block_size(o.Opt, C.size_t(s))
 }
 
+// SetMaxFileSize sets the maximum size of a file on the file system.
+//
+// The default is 4MB. A better setting depends on
+// your use case. See the LevelDB documentation for details.
+func (o *Options) SetMaxFileSize(s int) {
+	C.leveldb_options_set_max_file_size(o.Opt, C.size_t(s))
+}
+
 // SetBlockRestartInterval is the number of keys between restarts points for
 // delta encoding keys.
 //

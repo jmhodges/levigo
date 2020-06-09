@@ -35,6 +35,7 @@ func TestC(t *testing.T) {
 	options.SetParanoidChecks(true)
 	options.SetMaxOpenFiles(10)
 	options.SetBlockSize(1024)
+	options.SetMaxFileSize(4 << 20)
 	options.SetBlockRestartInterval(8)
 	options.SetCompression(NoCompression)
 
